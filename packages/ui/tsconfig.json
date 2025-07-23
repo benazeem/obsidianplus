@@ -1,8 +1,12 @@
 {
-  "extends": "@repo/typescript-config/react-library.json",
+  "extends": "@obsidianplus/tsconfig/tsconfig.base.json",
   "compilerOptions": {
-    "outDir": "dist"
+    "jsx": "react-jsx",
+    "composite": true,
+    "baseUrl": ".",
+    "paths": {
+      "@obsidian/ui": ["."]
+    }
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "include": ["components", "index.ts", "**/*.ts" , "**/*.tsx", "../../tailwind.config.ts"]
 }

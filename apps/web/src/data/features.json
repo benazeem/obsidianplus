@@ -1,0 +1,74 @@
+[
+  {
+    "title": "Cross-Platform Native Host",
+    "description": [
+      "Works on Windows, macOS, and Linux",
+      "Provides seamless communication between browser and OS",
+      "Uses native messaging for performance and reliability"
+    ],
+    "icon": "laptop"
+  },
+  {
+    "title": "Advanced File System Access",
+    "description": [
+      "Read and write to local files from the browser",
+      "Ideal for note syncing, file automation, and scripting",
+      "No need for cloud APIs or external servers"
+    ],
+    "icon": "FolderOpen"
+  },
+  {
+    "title": "Real-Time WebSocket Communication",
+    "description": [
+      "Low-latency two-way messaging",
+      "Synchronize data and commands instantly",
+      "Reliable architecture built for developers"
+    ],
+    "icon": "wifi"
+  },
+  {
+    "title": "Secure and Private by Design",
+    "description": [
+      "Runs entirely offline – no external communication",
+      "Localhost communication ensures maximum privacy",
+      "No telemetry or data collection"
+    ],
+    "icon": "ShieldCheck"
+  },
+  {
+    "title": "Developer-Focused Logging",
+    "description": [
+      "Visual logs in browser and HTML UI",
+      "Helps debug native-host communication easily",
+      "Detailed error and status outputs"
+    ],
+    "icon": "code"
+  },
+  {
+    "title": "Obsidian Optimized",
+    "description": [
+      "Built to enhance your Obsidian workflows",
+      "Trigger scripts, manage markdowns, and more",
+      "Custom-tailored for local knowledge management"
+    ],
+    "icon": "book"
+  },
+  {
+    "title": "Lightweight and Efficient",
+    "description": [
+      "Minimal resource usage on all platforms",
+      "Instant startup and background execution",
+      "No bloat or unnecessary services"
+    ],
+    "icon": "zap"
+  },
+  {
+    "title": "Easy Installation and Setup",
+    "description": [
+      "Simple step-by-step setup flow",
+      "Quick download and manifest registration",
+      "Start using in under 2 minutes"
+    ],
+    "icon": "CheckCircle"
+  }
+]

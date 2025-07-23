@@ -1,0 +1,26 @@
+[
+  {
+    "title": "Install the Chrome Extension",
+    "description": "Add the extension from the Chrome Web Store.",
+    "icon": "chrome",
+    "step": 1
+  },
+  {
+    "title": "Download the Native Host",
+    "description": "Select your OS and download the native host app.",
+    "icon": "download",
+    "step": 2
+  },
+  {
+    "title": "Connect and Authorize",
+    "description": "The extension establishes a secure connection to the host.",
+    "icon": "shield",
+    "step": 3
+  },
+  {
+    "title": "Start Using the Features",
+    "description": "The extension and host work together to enable file system access, syncing, and automation.",
+    "icon": "settings",
+    "step": 4
+  }
+]

@@ -1,0 +1,10 @@
+{
+  "files": [],
+  "references": [
+    { "path": "apps/web" },
+    { "path": "apps/extension" },
+    { "path": "apps/host" },
+    { "path": "packages/ui" }
+  ],
+  "extends": "./packages/typescript-config/tsconfig.base.json"
+}

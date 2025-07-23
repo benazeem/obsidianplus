@@ -1,0 +1,22 @@
+{
+  "name": "obsidianplushost",
+  "main": "./obsidianplusHost.js",
+  "description": "Native host for Chrome extension to manage Obsidian vaults",
+  "version": "1.0.0",
+  "window": {
+    "show": false,
+    "frame": false,
+    "toolbar": false,
+    "icon": "./icon.ico",
+    "category": "Utility"
+  },
+  "mac": {
+    "category": "public.app-category.utilities",
+    "icon": "./icon.icns"
+  },
+  "linux": {
+    "icon": "./icon.png",
+    "category": "Utility"
+  }
+}
+  

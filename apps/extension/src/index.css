@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "@obsidianplus/ui/styles/output.css";
+
+
+@custom-variant dark (&:is(.dark *));
+
+::-webkit-scrollbar {
+  width: 1px;
+  height: 1px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 1px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}

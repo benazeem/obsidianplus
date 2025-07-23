@@ -1,0 +1,10 @@
+{
+  "extends": "@obsidianplus/tsconfig/tsconfig.app.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    }
+  },
+  "include": ["src", "../../packages/ui/lib"]
+}

@@ -1,9 +1,11 @@
 {
-  "name": "@repo/typescript-config",
-  "version": "0.0.0",
-  "private": true,
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  }
+  "name": "@obsidianplus/tsconfig",
+  "version": "1.0.0",
+  "main": "tsconfig.base.json",
+  "exports": {
+    "./tsconfig.base.json": "./tsconfig.base.json",
+    "./tsconfig.app.json": "./tsconfig.app.json",
+    "./tsconfig.node.json": "./tsconfig.node.json"
+  },
+  "files": ["tsconfig*.json"]
 }

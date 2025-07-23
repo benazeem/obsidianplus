@@ -1,20 +1,33 @@
 {
-  "name": "my-turborepo",
+  "name": "obsidianplus",
   "private": true,
+  "packageManager": "pnpm@9.0.0",
   "scripts": {
+    "dev": "turbo run dev --parallel",
     "build": "turbo run build",
-    "dev": "turbo run dev",
     "lint": "turbo run lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
-    "check-types": "turbo run check-types"
+    "check": "turbo run check-types",
+    "test": "turbo run test"
   },
+  "workspaces": [
+    "apps/web",
+    "apps/host",
+    "apps/extension"
+  ],
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.11",
+    "@types/node": "^24.0.8",
+    "autoprefixer": "^10.4.21",
+    "postcss": "^8.5.6",
     "prettier": "^3.6.0",
-    "turbo": "^2.5.0",
+    "tailwindcss": "^4.1.11",
+    "turbo": "^2.5.4",
     "typescript": "5.8.2"
   },
-  "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=18"
+  },
+  "dependencies": {
+    "lucide-react": "^0.525.0"
   }
 }

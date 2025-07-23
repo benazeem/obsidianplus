@@ -1,0 +1,30 @@
+{
+  "name": "@obsidianplus/host",
+  "version": "1.0.0",
+  "description": "Native host for Chrome extension to manage Obsidian vaults",
+  "main": "dist/obsidianplusHost.js",
+  "private": true,
+  "scripts": {
+    "compile": "tsc",
+    "dev": "tsc && node nwapp/obsidianplusHost.js",
+    "start": "node ./nwapp/obsidianplusHost.js",
+    "build": "tsc && esbuild ./src/obsidianplusHost.ts --bundle --outfile=./nwapp/obsidianplusHost.js --platform=node --target=node20 && npm run nw-all",
+    "nw-win": "nwbuild --mode build --platform win --arch x64 --flavor normal --zip true --outDir releases/windows --glob=false ./nwapp",
+    "nw-linux": "nwbuild --mode build --platform linux --arch x64 --flavor normal --zip true --outDir releases/linux --glob=false ./nwapp",
+    "nw-mac": "nwbuild --mode build --platform osx --arch x64 --flavor normal --zip true --outDir releases/mac --glob=false ./nwapp",
+    "nw-all": "npm run nw-win && npm run nw-linux && npm run nw-mac"
+  },
+  "dependencies": {
+    "ws": "^8.16.0"
+  },
+  "devDependencies": {
+      "@obsidianplus/tsconfig": "workspace:*",
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.10.0",
+    "@types/ws": "^8.5.10",
+    "esbuild": "^0.25.8",
+    "nw": "^0.82.0",
+    "nw-builder": "^4.13.16", 
+    "typescript": "^5.3.0"
+  }
+}
