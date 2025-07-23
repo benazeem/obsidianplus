@@ -97,7 +97,7 @@ const Popup: React.FC = () => {
             rel="noopener noreferrer"
             className="underline"
           >
-            devazeem
+            benazeem
           </a>
         </div>
       </div>

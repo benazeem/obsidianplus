@@ -12,6 +12,8 @@ import reportWebVitals from './reportWebVitals.ts'
 import App from './App.tsx'    
 import Home from './pages/Home'
 import Install from './pages/Install'
+import PrivacyPolicy from './pages/PrivacyPolicy.tsx'
+import TermsOfService from './pages/TermsOfService.tsx'
 
 // Root route wraps layout
 const rootRoute = createRootRoute({
@@ -41,9 +43,21 @@ const installRoute = createRoute({
   path: '/install',
   component: Install,
 })
- 
-export const routeTree = rootRoute.addChildren([appRoute.addChildren([homeRoute, installRoute])])
- 
+
+const privacyPolicyRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/privacy-policy',
+  component: PrivacyPolicy,
+})
+
+const termsOfServiceRoute = createRoute({
+  getParentRoute: () => appRoute,
+  path: '/terms-of-service',
+  component: TermsOfService,
+})
+
+export const routeTree = rootRoute.addChildren([appRoute.addChildren([homeRoute, installRoute, privacyPolicyRoute, termsOfServiceRoute])])
+
 const router = createRouter({
   routeTree,
   context: {},

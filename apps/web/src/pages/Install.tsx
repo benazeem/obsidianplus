@@ -175,7 +175,7 @@ echo "✅ Obsidian Plus Host started."
               <button
                 onClick={() => {
                   window.open(
-                    'https://github.com/devazeem/obsidianplus/releases/download/v1.0.0/obsidianplus.exe',
+                    'https://github.com/benazeem/obsidianplus/releases/download/v1.0.0/obsidianplus.exe',
                     '_blank',
                   )
                   setNextDisabled(false)

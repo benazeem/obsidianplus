@@ -1,4 +1,5 @@
 import { Github, Twitter } from 'lucide-react'
+import {Link} from '@tanstack/react-router'
 
 function Footer() {
   return (
@@ -42,7 +43,7 @@ function Footer() {
             <li>
               GitHub:
               <a href="https://github.com/benazeem" className="hover:underline">
-                devazeem
+                benazeem
               </a>
             </li>
             <li>
@@ -75,13 +76,13 @@ function Footer() {
         </div>
       </div>
       <div className="mt-2 w-full flex items-center justify-between text-center text-base text-purple-200">
-        <a href="/privacy-policy" className="hover:underline text-sm">
+        <Link to="/privacy-policy" className="hover:underline text-sm">
           Privacy Policy
-        </a>
-        <p>&copy; {new Date().getFullYear()} Obsidian Plus. All rights reserved.</p> 
-        <a href="/terms-of-service" className="hover:underline text-sm">
+        </Link>
+        <p>&copy; {new Date().getFullYear()} Obsidian Plus. All rights reserved.</p>
+        <Link to="/terms-of-service" className="hover:underline text-sm">
           Terms of Service
-        </a>
+        </Link>
       </div> 
     </footer>
   )

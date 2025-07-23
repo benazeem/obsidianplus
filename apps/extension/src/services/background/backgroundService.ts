@@ -24,7 +24,7 @@ export function initBackgroundService(): void {
 
   chrome.runtime.onInstalled.addListener(() => {
     console.log("Extension installed");
-    window.open("https://obsidianplus.devazeem.me/", "_blank");
+    window.open("https://obsidianplus.devazeem.me/install", "_blank");
     launchAndConnectToHost(ctx);
     chrome.runtime.sendMessage({
       type: "LAUNCH_HOST",
