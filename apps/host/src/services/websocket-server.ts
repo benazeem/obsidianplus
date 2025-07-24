@@ -1,6 +1,6 @@
 import { WebSocketServer, WebSocket } from "ws";
 import { handleMessage } from "./message-handler";
-import type  { Message, Response } from "../types";
+import type  { Message, Response } from "../../types/types";
 import { log, error as logError } from "./logger";
 
 export function startWebSocketServer(port = 3939): void {

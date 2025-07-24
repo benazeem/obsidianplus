@@ -1,5 +1,5 @@
 import * as os from 'os';
-import type  { SystemInfo } from '../types';
+import type  { SystemInfo } from '../../types/types';
 
 export function getSystemInfo(): SystemInfo {
   const totalMemory = os.totalmem();

@@ -1,30 +1,67 @@
 {
   "name": "@obsidianplus/host",
   "version": "1.0.0",
+  "author": {
+    "name": "Mohammad Anwar",
+    "email": "azeemkhandsari@gmail.com"
+  },
   "description": "Native host for Chrome extension to manage Obsidian vaults",
-  "main": "dist/obsidianplusHost.js",
-  "private": true,
+  "main": "dist/electron/main.js",
+  "build": {
+    "appId": "com.obsidianplus.host",
+    "productName": "obsidianplushost",
+    "files": [
+      "dist/**/*"
+    ],
+    "asar": true,
+    "extraMetadata": {
+      "main": "dist/electron/main.js"
+    },
+    "mac": {
+      "target": "zip",
+      "category": "public.app-category.productivity",
+      "icon": "icons/icon.icns"
+    },
+    "win": {
+      "target": "zip",
+      "icon": "icons/icon.ico"
+    },
+    "linux": {
+      "target": "zip",
+      "category": "Utility",
+      "icon": "icons/icon.png"
+    }
+  },
   "scripts": {
     "compile": "tsc",
-    "dev": "tsc && node nwapp/obsidianplusHost.js",
+    "dev": "tsc --watch",
+    "start-electron": "electron .",
+    "dist": "electron-builder --dir",
+    "build:win:x64": " electron-builder --win --x64 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-win.zip releases/win-x64-v1.0.0.zip",
+    "build:win:ia32": "  electron-builder --win --ia32 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-win.zip releases/win-ia32-v1.0.0.zip",
+    "build:linux:x64": " electron-builder --linux --x64 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-linux.zip releases/linux-x64-v1.0.0.zip",
+    "build:linux:arm64": " electron-builder --linux --arm64 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-linux.zip releases/linux-arm64-v1.0.0.zip",
+    "build:mac:x64": " electron-builder --mac --x64 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-mac.zip releases/mac-x64-v1.0.0.zip",
+    "build:mac:arm64": "  electron-builder --mac --arm64 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-mac.zip releases/mac-arm64-v1.0.0.zip",
+    "build": " pnpm run build:win:x64 && pnpm run build:win:ia32 && pnpm run build:linux:x64 && pnpm run build:linux:arm64 ",
+    "debug-tsc": "tsc --traceResolution --listFiles --listEmittedFiles",
     "start": "node ./nwapp/obsidianplusHost.js",
-    "build": "tsc && esbuild ./src/obsidianplusHost.ts --bundle --outfile=./nwapp/obsidianplusHost.js --platform=node --target=node20 && npm run nw-all",
-    "nw-win": "nwbuild --mode build --platform win --arch x64 --flavor normal --zip true --outDir releases/windows --glob=false ./nwapp",
-    "nw-linux": "nwbuild --mode build --platform linux --arch x64 --flavor normal --zip true --outDir releases/linux --glob=false ./nwapp",
-    "nw-mac": "nwbuild --mode build --platform osx --arch x64 --flavor normal --zip true --outDir releases/mac --glob=false ./nwapp",
-    "nw-all": "npm run nw-win && npm run nw-linux && npm run nw-mac"
+    "nw-win": "node ./nwapp/build.mjs --platform win --arch x64,ia32 --outfile=./releases/obsidianplushost-win.zip",
+    "nw-linux": "node ./nwapp/build.mjs --platform linux --arch arm64,x64 --outfile=./releases/obsidianplushost-linux.zip",
+    "nw-mac": "node ./nwapp/build.mjs --platform osx --arch x64,arm64 --outfile=./releases/obsidianplushost-mac.zip",
+    "nw-all": "node ./nwapp/build.mjs --platform all --arch x64,arm64,ia32"
   },
   "dependencies": {
     "ws": "^8.16.0"
   },
   "devDependencies": {
-      "@obsidianplus/tsconfig": "workspace:*",
+    "@obsidianplus/tsconfig": "workspace:*",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.10.0",
     "@types/ws": "^8.5.10",
+    "electron": "^30.0.0",
+    "electron-builder": "^26.0.12",
     "esbuild": "^0.25.8",
-    "nw": "^0.82.0",
-    "nw-builder": "^4.13.16", 
     "typescript": "^5.3.0"
   }
 }

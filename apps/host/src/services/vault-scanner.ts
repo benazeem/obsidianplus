@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
-import type  { VaultInfo, FileTreeItem } from "../types";
+import type  { VaultInfo, FileTreeItem } from "../../types/types";
 import { log, error as logError } from "./logger";
 
 export async function scanObsidianVaults(

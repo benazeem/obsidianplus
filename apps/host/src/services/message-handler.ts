@@ -1,4 +1,4 @@
-import type  { Message, Response, MessageCallback } from "../types";
+import type  { Message, Response, MessageCallback } from "../../types/types";
 import { log, warn, error as logError } from "./logger";
 import { getSystemInfo } from "./system-info";
 import { scanObsidianVaults } from "./vault-scanner";
