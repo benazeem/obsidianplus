@@ -16,16 +16,17 @@
   ],
   "devDependencies": {
     "@tailwindcss/postcss": "^4.1.11",
-    "@types/node": "^24.0.8",
+    "@types/node": "^24.1.0",
     "autoprefixer": "^10.4.21",
     "postcss": "^8.5.6",
-    "prettier": "^3.6.0",
+    "prettier": "^3.6.2",
     "tailwindcss": "^4.1.11",
-    "turbo": "^2.5.4",
+    "turbo": "^2.5.5",
     "typescript": "5.8.2"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18",
+    "pnpm": ">=8.9.2"
   },
   "dependencies": {
     "lucide-react": "^0.525.0"

@@ -13,7 +13,7 @@ function Home() {
        <Hero />
        <div className="features-wrapper w-full overflow-hidden"> 
         <h2 className='text-4xl font-bold p-8'>Features</h2>
-        <div className='feature-section flex justify-evenly items-center gap-4 p-8 overflow-scroll'>
+        <div className='feature-section flex justify-evenly items-center gap-4 p-2 md:p-8 overflow-scroll'>
          {Features.map((feature, index) => { 
          
            return (
@@ -38,7 +38,7 @@ function Home() {
                              icon={step.icon}
                              step={step.step}
                          />
-                           {step.step < WorkSteps.length && <ArrowDown className="w-8 h-8 mb-2 text-white" />}
+                           {step.step < WorkSteps.length && <ArrowDown className="w-8 h-8 md:mb-2 text-white" />}
                          </>
                      );
                  })}

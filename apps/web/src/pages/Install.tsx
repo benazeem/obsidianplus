@@ -16,6 +16,16 @@ function Install() {
   })
   const [nextDisabled, setNextDisabled] = useState(true)
 
+  const OSDATA: Array<{
+    name: string
+    value: 'windows' | 'linux' | 'apple'
+    icon: string
+  }> = [
+    { name: 'Windows', value: 'windows', icon: '/windows.svg' },
+    { name: 'Linux', value: 'linux', icon: '/linux.svg' },
+    { name: 'Apple', value: 'apple', icon: '/apple.svg' },
+  ]
+
   const manifestPath = {
     windows:
       'C:\\Users\\<your-username>\\AppData\\Local\\Google\\Chrome\\NativeMessagingHosts',
@@ -110,64 +120,41 @@ echo "✅ Obsidian Plus Host started."
   }
 
   return (
-    <div className="install-page min-h-screen flex flex-col  items-center justify-center p-6 text-white">
-      <h2 className="text-2xl font-semibold my-4">Installation Steps</h2>
-      <div className="max-w-3xl w-full min-h-102 flex flex-col justify-between items-center gap-12 bg-gray-800/20 backdrop-blur-md rounded-lg shadow-lg p-8">
+    <div className="install-page min-h-screen flex flex-col   items-center justify-center p-6 text-white">
+      <h2 className="text-xl md:text-2xl lg:text-3xl font-semibold my-4 mt-[10dvh]">
+        Installation Steps
+      </h2>
+      <div className="max-w-3xl w-full min-h-102 flex flex-col justify-between items-center gap-6 md:gap-8 lg:gap-12 bg-gray-800/20 backdrop-blur-md rounded-lg shadow-lg p-4 md:p-6 lg:p-8">
         <div>
-          <h3 className="text-xl font-semibold mb-2">Step {formData.Step}</h3>
+          <h3 className="text-lg md:text-xl lg:text-2xl font-semibold mb-2">
+            Step {formData.Step}
+          </h3>
         </div>
-        <div className=" w-full min-h-44 flex flex-col items-center justify-center gap-4">
+        <div className=" w-full min-h-44 flex flex-col items-center justify-center gap-4 text-sm md:text-base lg:text-lg">
           {formData.Step === 1 && (
-            <div className="flex items-center justify-evenly w-full gap-4">
-              <button
-                onClick={() => {
-                  setFormData({ ...formData, os: 'windows' })
-                  setNextDisabled(false)
-                }}
-                className="flex flex-col items-center justify-center gap-4 py-4 bg-gray-500 w-1/4 text-xl rounded-lg"
-              >
-                <img
-                  draggable="false"
-                  src="/windows.svg"
-                  alt="Windows"
-                  className="h-24"
-                />
-                <h4>Windows</h4>
-              </button>
-              <button
-                onClick={() => {
-                  setFormData({ ...formData, os: 'linux' })
-                  setNextDisabled(false)
-                }}
-                className="flex flex-col items-center justify-center gap-4 py-4 bg-gray-300 text-black w-1/4 text-xl rounded-lg"
-              >
-                <img
-                  draggable="false"
-                  src="/linux.svg"
-                  alt="Linux"
-                  className="h-24 "
-                />
-                <h4>Linux</h4>
-              </button>
-              <button
-                onClick={() => {
-                  setFormData({ ...formData, os: 'apple' })
-                  setNextDisabled(false)
-                }}
-                className="flex flex-col items-center justify-center gap-4 py-4 bg-gray-500 w-1/4 text-xl rounded-lg"
-              >
-                <img
-                  draggable="false"
-                  src="/apple.svg"
-                  alt="Apple"
-                  className="h-24"
-                />
-                <h4>Apple</h4>
-              </button>
+            <div className="flex flex-col md:flex-row items-center justify-evenly w-full gap-4">
+              {OSDATA.map((os) => (
+                <button
+                  key={os.value}
+                  onClick={() => {
+                    setFormData({ ...formData, os: os.value })
+                    setNextDisabled(false)
+                  }}
+                  className={`flex flex-col items-center justify-center gap-4 py-4 w-[80%] md:w-1/3 lg:w-1/4 text-xl rounded-lg ${os.value === 'linux' ? 'bg-gray-200 text-gray-800' : 'bg-gray-500 text-gray-100'}`}
+                >
+                  <img
+                    draggable="false"
+                    src={os.icon}
+                    alt={os.name}
+                    className="h-24"
+                  />
+                  <h4>{os.name}</h4>
+                </button>
+              ))}
             </div>
           )}
           {formData.Step === 2 && (
-            <div className="flex flex-col items-center justify-center gap-4 w-[80%]">
+            <div className="flex flex-col items-center justify-center gap-6 lg:gap-8 w-full lg:w-[80%]">
               <p>
                 Download the <strong>Obsidian+ Web Clipper</strong> zip file for
                 your operating system
@@ -180,21 +167,19 @@ echo "✅ Obsidian Plus Host started."
                   )
                   setNextDisabled(false)
                 }}
-                className="mt-4 bg-blue-500 hover:bg-blue-600 font-semibold py-2 px-4 rounded-lg"
+                className="  bg-blue-500 hover:bg-blue-600 font-semibold py-2 px-4 rounded-lg"
               >
                 Download
               </button>
-              <p className="mt-4">
+              <p>
                 Once downloaded, extract the zip file to your desired location
                 to access the plugin files.
               </p>
             </div>
           )}
           {formData.Step === 3 && (
-            <div className="flex flex-col items-center justify-center gap-4 w-[80%]">
-              <p className="text-lg">
-                Enter the host location where you extracted the host files.
-              </p>
+            <div className=" flex flex-col items-center justify-center gap-4 md:gap-6 lg:gap-8 w-full lg:w-[80%]">
+              <p>Enter the host location where you extracted the host files.</p>
               <label htmlFor="hostLocation" className="sr-only">
                 Host Location
               </label>
@@ -220,8 +205,8 @@ echo "✅ Obsidian Plus Host started."
             </div>
           )}
           {formData.Step === 4 && formData.os === 'windows' && (
-            <div className="flex flex-col items-center justify-center gap-4 w-[80%]">
-              <p>
+            <div className="flex flex-col items-center justify-center gap-4 md:gap-6 lg:gap-8 w-full lg:w-[80%]">
+              <p className='break-all'>
                 Extract the manifest zip files in the following location:&nbsp;
                 <span className="text-blue-300 font-semibold">
                   &nbsp;{manifestPath[formData.os]}
@@ -256,7 +241,7 @@ echo "✅ Obsidian Plus Host started."
             </div>
           )}
           {formData.Step === 4 && formData.os !== 'windows' && (
-            <div className="flex flex-col items-center justify-center gap-4 w-[80%]">
+            <div className="flex flex-col items-center justify-center w-full lg:w-[80%]">
               <p>
                 Extract the manifest zip files in the following location: &nbsp;
                 <span className="text-blue-300 font-semibold">
@@ -267,7 +252,7 @@ echo "✅ Obsidian Plus Host started."
           )}
           {formData.Step === 5 && formData.os === 'windows' && (
             <div className="flex flex-col items-center justify-center gap-4 w-[80%]">
-              <p className="text-lg">
+              <p>
                 To complete the installation, run the{' '}
                 <span className="font-semibold text-blue-300">
                   register.reg
@@ -281,14 +266,14 @@ echo "✅ Obsidian Plus Host started."
                 <span className="font-semibold">"Yes"</span> to allow the
                 registration.
               </p>
-              <p className="text-sm text-gray-400">
+              <p className="text-sm lg:text-base text-gray-400">
                 After running the file, you can proceed to use the Obsidian+ Web
                 Clipper extension in Chrome.
               </p>
             </div>
           )}
         </div>
-        <div className="w-full h-10 flex items-center justify-between gap-4">
+        <div className="w-full h-10 flex items-center justify-between gap-4 text-sm md:text-base lg:text-lg">
           {formData.Step > 1 && (
             <button
               onClick={() =>
