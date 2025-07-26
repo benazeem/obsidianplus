@@ -1,7 +1,7 @@
 export function log(message: string): void {
   const timestamp = new Date().toISOString();
   const logMessage = `[${timestamp}] [ObsidianHost] ${message}`;
-  console.error(logMessage);
+  console.log(logMessage);
 }
 
 export function error(message: string, err?: Error): void {
@@ -18,6 +18,5 @@ export function error(message: string, err?: Error): void {
 export function warn(message: string): void {
   const timestamp = new Date().toISOString();
   const warnMessage = `[${timestamp}] [ObsidianHost] WARN: ${message}`;
-
   console.warn(warnMessage);
 }

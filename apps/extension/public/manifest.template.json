@@ -30,7 +30,7 @@
     ]
   },
   "action": {
-    "default_popup": "index.html"
+    "default_popup": "popup.html"
   },
   "options_page": "settings.html",
   "background": {

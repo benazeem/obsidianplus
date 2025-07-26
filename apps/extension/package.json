@@ -28,7 +28,6 @@
   "devDependencies": {
     "@obsidianplus/tsconfig": "workspace:*",
     "@eslint/js": "^9.29.0",
-    "@types/chrome": "^0.0.328",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^24.0.10",
     "@types/react": "^19.1.8",
@@ -36,7 +35,9 @@
     "@types/turndown": "^5.0.5",
     "@vitejs/plugin-react": "^4.5.2",
     "chrome-types": "^0.1.361",
+    "@types/chrome": "^0.0.328",
     "eslint": "^9.29.0",
+    "prettier": "^3.5.3",
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^16.2.0",

@@ -1,6 +1,6 @@
 // features/api/dropboxApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { getValidDropboxToken } from "@/services/background/auth/dropboxAuth";
+import { getValidDropboxToken } from "@/services/auth/dropboxAuth";
 import axios from "axios";
 
 export const dropboxApi = createApi({

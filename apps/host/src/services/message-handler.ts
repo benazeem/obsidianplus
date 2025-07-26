@@ -1,11 +1,12 @@
-import type  { Message, Response, MessageCallback } from "../../types/types";
+import type { Message, Response, MessageCallback } from "../types/types";
 import { log, warn, error as logError } from "./logger";
 import { getSystemInfo } from "./system-info";
 import { scanObsidianVaults } from "./vault-scanner";
 import { saveMarkdownFile } from "./file-manager";
-import { startWebSocketServer } from "./websocket-server";
+import { startWebSocketServer } from "./websocket-server"; 
 
 export async function handleMessage(
+  app: Electron.App,
   message: Message,
   callback: MessageCallback
 ): Promise<void> {
@@ -22,7 +23,7 @@ export async function handleMessage(
       case "launch":
         response.success = true;
         response.data = { startedAt: Date.now() };
-        startWebSocketServer();
+        startWebSocketServer(app);
         break;
 
       case "ping":
@@ -55,8 +56,8 @@ export async function handleMessage(
 
         response.success = true;
         response.data = vaults;
-        break;
-
+        break; 
+      
       case "saveMarkdownFile":
         if (!message.payload?.content || !message.payload?.path) {
           response.error = "Missing content or path in payload";
@@ -65,7 +66,7 @@ export async function handleMessage(
 
         const saveResult = await saveMarkdownFile(
           message.payload.content,
-          message.payload.path, 
+          message.payload.path
         );
 
         response.success = saveResult.success;
@@ -97,7 +98,15 @@ export async function handleMessage(
         response.data = {
           shutdownAt: Date.now(),
         };
-        setTimeout(() => process.exit(0), 5000);
+        app.quit();
+        setTimeout(() => {
+          // Electron uses 'isQuitting' (note the double 't')
+          if (!(app as any).isQuitting) {
+            console.log("Force exiting after timeout");
+            process.exit(0);
+          }
+        }, 5000);
+
         break;
 
       default:

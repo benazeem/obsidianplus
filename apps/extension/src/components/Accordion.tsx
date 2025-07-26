@@ -1,13 +1,19 @@
-import React, { useState } from "react";
-import { ChevronDown, ChevronUp, Folder, Plus } from "lucide-react";
-import type { FolderEntry } from "../types";
-import { htmlPageToMarkdown } from "@/utils/markdownConverter";
-import saveCloudFile from "@/services/handlers/saveFileHanlders";
+import React, { useState } from 'react'
+import { ChevronDown, ChevronUp, Folder, Plus } from 'lucide-react'
+import type { FolderEntry } from '../types'
+import {
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenu,
+  Button,
+} from '@obsidianplus/ui'
+import { handlePageAdd } from '@/services/handlers/handlePageAdd'
 
 interface FolderAccordionProps {
-  data: FolderEntry[];
-  location?: "obsidian" | "googledrive" | "onedrive" | "dropbox";
-  level?: number;
+  data: FolderEntry[]
+  location: 'obsidian' | 'googledrive' | 'onedrive' | 'dropbox'
+  level?: number
 }
 
 const FolderAccordion: React.FC<FolderAccordionProps> = ({
@@ -26,86 +32,16 @@ const FolderAccordion: React.FC<FolderAccordionProps> = ({
         />
       ))}
     </div>
-  );
-};
-
-const FolderAccordionItem: React.FC<{
-  folder: FolderEntry;
-  level: number;
-  location?: "obsidian" | "googledrive" | "onedrive" | "dropbox";
-}> = ({ location, folder, level }) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const hasChildren = folder.folders?.length > 0;
-
-
-  function sanitizeFileName(name: string): string {
-  return name
-    .replace(/[:*?"<>|\\/]/g, "") // remove illegal characters
-    .replace(/\s+/g, " ") // collapse spaces
-    .trim();
+  )
 }
 
-  const handlePageAdd = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    const pageMarkdown = await htmlPageToMarkdown();
-    const fileContent = pageMarkdown.markdown;
-    const fileName =
-      pageMarkdown.title?.trim() !== ""
-        ? `${pageMarkdown.title}_${new Date().toISOString().split("T")[0]}.md`
-        : `Untitled_${new Date().toISOString().split("T")[0]}.md`;
-
-  
-
-    if (location === "obsidian") {
-      const sanitizedFileName = sanitizeFileName(fileName);
-      const filePath = `${folder.path}/${sanitizedFileName}`;
-      // console.log("Saving file to Obsidian:", filePath);
-      try {
-        chrome.runtime.sendMessage(
-          {
-            type: "SAVE_OBSIDIAN_FILE",
-            payload: { content: fileContent, path: filePath },
-          },
-          (response) => {
-            if (chrome.runtime.lastError) {
-              console.error("Runtime error:", chrome.runtime.lastError.message);
-              return;
-            }
-            if (response?.success) {
-              // console.log("File saved successfully:", response.data);
-            }
-          }
-        );
-      } catch (error) {
-        console.error("Error saving file:", error);
-      }
-    }
-    if (location === "googledrive") {
-      // console.log(`Saving file to ${location} folder:`, folder.name);
-      saveCloudFile(location, {
-        fileContent,
-        fileName,
-        mimeType: "text/plain",
-        folderId: folder.id,
-      });
-    }
-    if (location === "onedrive") {
-      saveCloudFile(location, {
-        fileContent,
-        fileName,
-        mimeType: "text/markdown",
-        folderId: folder.id,
-      });
-    }
-    if (location === "dropbox") {
-      saveCloudFile(location, {
-        fileContent,
-        fileName,
-        mimeType: "text/markdown",
-        folderId: folder.path,
-      });
-    }
-  };
+const FolderAccordionItem: React.FC<{
+  folder: FolderEntry
+  level: number
+  location: 'obsidian' | 'googledrive' | 'onedrive' | 'dropbox'
+}> = ({ location, folder, level }) => {
+  const [isOpen, setIsOpen] = useState(false)
+  const hasChildren = folder.folders?.length > 0
 
   return (
     <div className="border-l border-gray-300 dark:border-gray-950 pl-2 ">
@@ -125,14 +61,37 @@ const FolderAccordionItem: React.FC<{
           {hasChildren &&
             (isOpen ? <ChevronUp size={16} /> : <ChevronDown size={16} />)}
 
-          <span
-            onClick={handlePageAdd}
-            title="Add Page to Obsidian Folder"
-            role="button"
-            className="w-5 h-5 ml-2 cursor-pointer"
-          >
-            <Plus size={16} />
-          </span>
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="outline" size={'sm'}>
+                {<Plus size={16} />}
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() =>
+                  handlePageAdd({ output: 'markdown', location, folder })
+                }
+              >
+                + Page Markdown
+              </DropdownMenuItem>
+              {/* <DropdownMenuItem
+                onClick={() =>
+                  handlePageAdd({ output: 'capture', location, folder })
+                }
+              >
+                + Capture Page
+              </DropdownMenuItem> */}{' '}
+              {/* This feature will be implemented later in future */}
+              <DropdownMenuItem
+                onClick={() =>
+                  handlePageAdd({ output: 'metaData', location, folder })
+                }
+              >
+                + Meta Data
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </button>
 
@@ -146,7 +105,7 @@ const FolderAccordionItem: React.FC<{
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default FolderAccordion;
+export default FolderAccordion

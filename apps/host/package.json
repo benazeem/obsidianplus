@@ -6,50 +6,74 @@
     "email": "azeemkhandsari@gmail.com"
   },
   "description": "Native host for Chrome extension to manage Obsidian vaults",
-  "main": "dist/electron/main.js",
+  "main": "dist/electron.js",
   "build": {
+    "compression": "maximum",
     "appId": "com.obsidianplus.host",
     "productName": "obsidianplushost",
-    "files": [
-      "dist/**/*"
-    ],
     "asar": true,
+    "asarUnpack": [
+      "node_modules/**/*"
+    ],
+    "files": [
+      "!**/node_modules/*/{test,__tests__,tests}/**",
+      "!**/node_modules/**/*.map",
+      "!**/node_modules/**/*.md",
+      "!**/node_modules/**/example{,s}/**",
+      "!**/node_modules/**/*.d.ts",
+      "dist/**/*",
+      "electron.js",
+      "!src/**/*",
+      "!tests/**/*",
+      "!**/*.map",
+      "!**/*.ts",
+      "!**/*.tsx",
+      "!**/*.scss",
+      "!**/*.md",
+      "!**/__tests__/**/*"
+    ],
     "extraMetadata": {
-      "main": "dist/electron/main.js"
+      "main": "dist/electron.js",
+      "version": "1.0.0",
+      "author": {
+        "name": "Mohammad Azeem Malik",
+        "email": "azeemkhandsari@gmail.com"
+      }
+    },
+    "directories": {
+      "buildResources": "assets",
+      "output": "dist/releases"
     },
     "mac": {
       "target": "zip",
       "category": "public.app-category.productivity",
-      "icon": "icons/icon.icns"
+      "icon": "./src/assets/icons/icon.icns"
     },
     "win": {
       "target": "zip",
-      "icon": "icons/icon.ico"
+      "icon": "./src/assets/icons/icon.ico"
     },
     "linux": {
       "target": "zip",
       "category": "Utility",
-      "icon": "icons/icon.png"
-    }
+      "icon": "./src/assets/icons/icon.png"
+    },
+    "artifactName": "obsidian-plus-${platform}-${arch}-${version}.${ext}"
   },
   "scripts": {
     "compile": "tsc",
+    "esbuild": "pnpm compile && node scripts/esbuild.mjs",
     "dev": "tsc --watch",
     "start-electron": "electron .",
     "dist": "electron-builder --dir",
-    "build:win:x64": " electron-builder --win --x64 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-win.zip releases/win-x64-v1.0.0.zip",
-    "build:win:ia32": "  electron-builder --win --ia32 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-win.zip releases/win-ia32-v1.0.0.zip",
-    "build:linux:x64": " electron-builder --linux --x64 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-linux.zip releases/linux-x64-v1.0.0.zip",
-    "build:linux:arm64": " electron-builder --linux --arm64 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-linux.zip releases/linux-arm64-v1.0.0.zip",
-    "build:mac:x64": " electron-builder --mac --x64 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-mac.zip releases/mac-x64-v1.0.0.zip",
-    "build:mac:arm64": "  electron-builder --mac --arm64 --config.extraMetadata.version=1.0.0 && mv dist/obsidianplushost-v1.0.0-mac.zip releases/mac-arm64-v1.0.0.zip",
-    "build": " pnpm run build:win:x64 && pnpm run build:win:ia32 && pnpm run build:linux:x64 && pnpm run build:linux:arm64 ",
-    "debug-tsc": "tsc --traceResolution --listFiles --listEmittedFiles",
-    "start": "node ./nwapp/obsidianplusHost.js",
-    "nw-win": "node ./nwapp/build.mjs --platform win --arch x64,ia32 --outfile=./releases/obsidianplushost-win.zip",
-    "nw-linux": "node ./nwapp/build.mjs --platform linux --arch arm64,x64 --outfile=./releases/obsidianplushost-linux.zip",
-    "nw-mac": "node ./nwapp/build.mjs --platform osx --arch x64,arm64 --outfile=./releases/obsidianplushost-mac.zip",
-    "nw-all": "node ./nwapp/build.mjs --platform all --arch x64,arm64,ia32"
+    "build:win:x64": " electron-builder --win --x64",
+    "build:win:ia32": "  electron-builder --win --ia32",
+    "build:linux:x64": " electron-builder --linux --x64",
+    "build:linux:arm64": " electron-builder --linux --arm64",
+    "build:mac:x64": " electron-builder --mac --x64",
+    "build:mac:arm64": "  electron-builder --mac --arm64",
+    "build": "pnpm run pre-build && pnpm run build:win:x64 && pnpm run build:win:ia32 && pnpm run build:linux:x64 && pnpm run build:linux:arm64 && pnpm run build:mac:x64 && pnpm run build:mac:arm64",
+    "debug-tsc": "tsc --traceResolution --listFiles --listEmittedFiles"
   },
   "dependencies": {
     "ws": "^8.16.0"

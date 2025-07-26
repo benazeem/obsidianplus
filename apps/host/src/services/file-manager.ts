@@ -1,6 +1,6 @@
-import * as fs from "fs";
-import * as path from "path";
-import type { SaveFileResult } from "../../types/types";
+import fs from "fs";
+import path from "path";
+import type { SaveFileResult } from "../types/types";
 import { log, error as logError } from "./logger";
 
 export function isValidPath(filePath: string): boolean {

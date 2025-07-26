@@ -47,7 +47,7 @@ const Popup: React.FC = () => {
 
   return (
     <div
-      className={`w-[300px] h-[500px] ${fontSize} bg-cover bg-center overflow-y-scroll overflow-x-hidden `}
+      className={`w-[300px] max-h-[500px] min-h-[300px] ${fontSize} bg-cover bg-center overflow-y-scroll overflow-x-hidden `}
       style={{ backgroundImage: `url(${background})` }}
     >
       <PopupHead />

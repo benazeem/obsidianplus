@@ -42,7 +42,7 @@ export interface BaseMessage {
   type: string;
   payload?: any;
   timestamp: number;
-  messageId?: string;  
+  messageId?: string;
 }
 
 // Specific message types

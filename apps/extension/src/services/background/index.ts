@@ -1,14 +1,12 @@
 import { initBackgroundService } from "./backgroundService";
 
-initBackgroundService();
-
-export { startServices } from "./backgroundService";
+initBackgroundService(); 
 
 export {
   authenticate,
   revokeAuth as revokeGDriveConnection,
   refreshConnection,
-} from "./auth/googleAuth";
+} from "../auth/googleAuth";
 
 export {
   authenticate as authenticateOneDrive,
@@ -16,14 +14,14 @@ export {
   refreshConnection as refreshOneDriveConnection,
   getValidToken as getOneDriveValidToken,
   revokeAuth as revokeOneDriveConnection,
-} from "./auth/oneDriveAuth";
+} from "../auth/oneDriveAuth";
 
 export {
   authenticateDropbox,
   revokeDropboxAuth,
   refreshDropboxConnection,
-} from "./auth/dropboxAuth";
+} from "../auth/dropboxAuth";
 
-export { setChromeLocal, getChromeLocal } from "./db/localDdOperations";
+export { setChromeLocal, getChromeLocal } from "../db/localDdOperations";
 
 export { initializeStates } from "./stateInitializer";

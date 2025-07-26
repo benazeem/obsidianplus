@@ -1,6 +1,6 @@
 // features/api/googleDriveApi.ts
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { getValidToken } from "../../services/background/auth/googleAuth";
+import { getValidToken } from "../../services/auth/googleAuth";
 import type { Folder } from "@/types";
 
 export const googleDriveApi = createApi({
