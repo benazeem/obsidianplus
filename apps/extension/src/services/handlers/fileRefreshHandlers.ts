@@ -1,81 +1,95 @@
-import { dropboxApi } from "@/features/api/dropboxApi";
-import { googleDriveApi } from "@/features/api/googleDriveApi";
-import { oneDriveApi } from "@/features";
-import { setDropboxFolders } from "@/features/dropboxSlice";
-import { setGoogleDriveFolders } from "@/features/googleDriveSlice";
-import { setOneDriveFolders } from "@/features/oneDriveSlice";
-import type { AppDispatch } from "@/store";
-import { oneDriveFolderTransformation } from "@/utils/oneDriveFolderTranformation";
-import { googleDriveFolderTransformation } from "@/utils/googleDriveFolderTransformation";
-import { dropboxFolderTransformation } from "@/utils/dropboxFolderTransformation";
+import { dropboxApi } from '@/features/api/dropboxApi'
+import { googleDriveApi } from '@/features/api/googleDriveApi'
+import { oneDriveApi } from '@/features'
+import { setDropboxFolders } from '@/features/dropboxSlice'
+import { setGoogleDriveFolders } from '@/features/googleDriveSlice'
+import { setOneDriveFolders } from '@/features/oneDriveSlice'
+import type { AppDispatch } from '@/store'
+import { oneDriveFolderTransformation } from '@/utils/oneDriveFolderTranformation'
+import { googleDriveFolderTransformation } from '@/utils/googleDriveFolderTransformation'
+import { dropboxFolderTransformation } from '@/utils/dropboxFolderTransformation' 
+import { showNotification } from '@/features/notificationSlice'
 
 export default function refreshCloudFiles(
   cloud: string,
-  dispatch: AppDispatch
+  dispatch: AppDispatch, 
 ) {
   switch (cloud) {
-    case "gdrive":
-      return refreshGoogleDriveFiles(dispatch);
-    case "onedrive":
-      return refreshOneDriveFiles(dispatch);
-    case "dropbox":
-      return refreshDropboxFiles(dispatch);
+    case 'gdrive':
+      return refreshGoogleDriveFiles(dispatch )
+    case 'onedrive':
+      return refreshOneDriveFiles(dispatch )
+    case 'dropbox':
+      return refreshDropboxFiles(dispatch )
     default:
-      throw new Error("Unsupported cloud storage type");
+      throw new Error('Unsupported cloud storage type')
   }
 }
 
-const refreshGoogleDriveFiles = async (dispatch: AppDispatch) => {
+const refreshGoogleDriveFiles = async (
+  dispatch: AppDispatch, 
+) => {
   try {
     const foldersResponse = await dispatch(
       googleDriveApi.endpoints.listDriveFolders.initiate({
-        parentId: "root",
-      })
-    ).unwrap();
+        parentId: 'root',
+      }),
+    ).unwrap()
 
     const googleDriveFolders = await googleDriveFolderTransformation(
       foldersResponse.folders,
-      dispatch
-    );
+      dispatch,
+    )
 
-    dispatch(setGoogleDriveFolders(googleDriveFolders));
-  } catch (error) {
-    console.error("Error listing Google Drive files:", error);
-    return [];
+    dispatch(setGoogleDriveFolders(googleDriveFolders))
+    dispatch(
+      showNotification({ message: 'Google Drive folders refreshed successfully', type: 'info' })
+    )
+  } catch {
+    dispatch(
+      showNotification({ message: 'Failed to refresh Google Drive files: ', type: 'error' })
+    )
+    return []
   }
-};
+}
 
-const refreshOneDriveFiles = async (dispatch: AppDispatch) => {
-  try { 
+const refreshOneDriveFiles = async (
+  dispatch: AppDispatch, 
+) => {
+  try {
     const foldersResponse = await dispatch(
       oneDriveApi.endpoints.listOneDriveFolders.initiate(
-        { parentId: "root" },
-        { forceRefetch: true }
-      )
-    ).unwrap();
+        { parentId: 'root' },
+        { forceRefetch: true },
+      ),
+    ).unwrap()
 
     const oneDriveFolders = await oneDriveFolderTransformation(
       foldersResponse.folders,
-      dispatch
-    );
-    dispatch(setOneDriveFolders(oneDriveFolders || []));
-  } catch (error) {
-    console.error("Error listing OneDrive folders:", error);
-    return [];
+      dispatch,
+    )
+    dispatch(setOneDriveFolders(oneDriveFolders || []))
+    dispatch(showNotification({ message: 'OneDrive folders refreshed successfully', type: 'info' }))
+  } catch {
+    dispatch(showNotification({ message: 'Failed to refresh OneDrive files: ', type: 'error' }))
+    return []
   }
-};
+}
 
-const refreshDropboxFiles = async (dispatch: AppDispatch) => {
+const refreshDropboxFiles = async (
+  dispatch: AppDispatch, 
+) => {
   try {
     const folders = await dispatch(
-      dropboxApi.endpoints.listDropboxFolders.initiate({ path: "" })
-    ).unwrap();
+      dropboxApi.endpoints.listDropboxFolders.initiate({ path: '' }),
+    ).unwrap()
 
-    const dropboxFolders = await dropboxFolderTransformation(folders, dispatch);
+    const dropboxFolders = await dropboxFolderTransformation(folders, dispatch)
 
-    dispatch(setDropboxFolders(dropboxFolders));
-  } catch (error) {
-    console.error("Error listing Dropbox folders:", error);
-    return [];
+    dispatch(setDropboxFolders(dropboxFolders))
+    dispatch(showNotification({ message: 'Dropbox folders refreshed successfully', type: 'info' }))
+  } catch {
+    dispatch(showNotification({ message: 'Failed to refresh Dropbox files: ', type: 'error' }))
+    return []
   }
-};
+}

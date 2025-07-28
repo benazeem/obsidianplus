@@ -109,7 +109,7 @@ export interface PageInfo {
   referrer: string
   description?: string
   tags: string[]
-  html: string 
+  html: string
   timestamp: number
 }
 
@@ -118,4 +118,19 @@ export interface CloudUploadData {
   fileContent: string
   mimeType?: string
   folderId: string
+}
+
+export interface Notification {
+  message: string
+  type: 'info' | 'error' | 'warning'
+}
+
+export interface NotificationContextType {
+  notif: Notification | null
+  setNotif: (notif: Notification | null) => void
+  showNotification: Notification
+}
+
+export interface Notification {
+  (message: string, type: 'info' | 'error' | 'warning'): void
 }

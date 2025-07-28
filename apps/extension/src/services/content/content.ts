@@ -1,9 +1,5 @@
 import type { PageInfo } from '@/types'
 
-const extensionId = chrome.runtime.id
-
-console.log('[Content Script] Loaded ✅')
-
 function initialize(): void {
   chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     handleMessage(message, sender, sendResponse)
@@ -11,20 +7,24 @@ function initialize(): void {
   })
 }
 
+type Message =
+  | { type: 'PING' }
+  | { type: 'GET_PAGE_INFO' }
+  | {
+      type: 'SHOW_NOTIFICATION'
+      payload: { message: string; type: 'info' | 'error' | 'warning' }
+    }
+  | { type: string; [key: string]: unknown }
+
 async function handleMessage(
-  message: any,
+  message: Message,
   sender: chrome.runtime.MessageSender,
-  sendResponse: (response?: any) => void,
+  sendResponse: (response?: unknown) => void,
 ): Promise<void> {
-  console.log('Sender:', sender, extensionId)
+  console.log('Sender:', sender, 'Received message:', message)
 
   switch (message.type) {
     case 'PING':
-      sendResponse({ success: true })
-      break
-
-    case 'HOST_MESSAGE':
-      handleHostMessage(message.payload)
       sendResponse({ success: true })
       break
 
@@ -32,52 +32,24 @@ async function handleMessage(
       sendResponse({ success: true, data: getPageInfo() })
       break
 
-    case 'SHOW_NOTIFICATION':
-      showNotification(message.payload)
+    case 'SHOW_NOTIFICATION': {
+      const payload = message.payload as {
+        message: string
+        type: 'info' | 'error' | 'warning'
+      }
+      showNotification(payload.message, payload.type)
       sendResponse({ success: true })
       break
+    }
 
     default:
       sendResponse({ success: false, error: 'Unknown message type' })
   }
 }
 
-function handleHostMessage(payload: any): void {
-  if (payload.type === 'page_command') {
-    executePageCommand(payload.command)
-  }
-}
-
-function executePageCommand(command: string): void {
-  switch (command) {
-    case 'count_elements':
-      showElementCount()
-      break
-    default:
-    // console.log("Unknown page command:", command);
-  }
-}
-
-function showElementCount(): void {
-  const counts = {
-    links: document.querySelectorAll('a').length,
-    images: document.querySelectorAll('img').length,
-    forms: document.querySelectorAll('form').length,
-    inputs: document.querySelectorAll('input').length,
-  }
-
-  const message = `Page elements: ${Object.entries(counts)
-    .map(([key, value]) => `${key}: ${value}`)
-    .join(', ')}`
-
-  showNotification(message)
-}
-
 function getPageInfo(): PageInfo {
-  console.log('Getting page info...')
   const clonedBody = document.body.cloneNode(true) as HTMLElement
   const tagsSet = new Set<string>()
-
   const descriptionRaw = document
     .querySelector('meta[name="description"]')
     ?.getAttribute('content')
@@ -87,13 +59,6 @@ function getPageInfo(): PageInfo {
   if (hashtagMatches) {
     hashtagMatches.forEach((tag) => tagsSet.add(tag.slice(1).toLowerCase()))
   }
-
-  const doc = new DOMParser().parseFromString(
-    document.body.innerHTML,
-    'text/html',
-  )
-  console.log('Extracting tags from document:', doc)
-
   const keywords = document
     .querySelector('meta[name="keywords"]')
     ?.getAttribute('content')
@@ -104,8 +69,6 @@ function getPageInfo(): PageInfo {
       .filter(Boolean)
       .forEach((tag) => tagsSet.add(tag))
   }
-
-  // Filter out tags that look like meaningless hex color codes or numbers
   const uniqueTags = Array.from(tagsSet).filter((tag) => {
     // Remove tags that are all hex digits and length 3-6 (likely color codes)
     if (/^(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{6})$/i.test(tag)) return false
@@ -116,7 +79,6 @@ function getPageInfo(): PageInfo {
       return false
     return true
   })
-
   return {
     title: document.title,
     url: window.location.href,
@@ -130,14 +92,17 @@ function getPageInfo(): PageInfo {
   }
 }
 
-function showNotification(message: string): void {
+function showNotification(
+  message: string,
+  type: 'info' | 'error' | 'warning',
+): void {
   const notification = document.createElement('div')
   notification.style.cssText = `
     position: fixed;
     top: 50px;
-    right: 20px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    left: 20px;
+    background: ${type === 'error' ? '#f44336' : type === 'warning' ? '#ff9800' : '#4CAF50'};
+    color: #E0E0E0;
     padding: 12px 20px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0,0,0,0.3);
@@ -146,11 +111,9 @@ function showNotification(message: string): void {
     font-size: 14px;
     max-width: 300px;
     opacity: 0;
-    transform: translateX(100%);
+    transform: translateX(-100%);
     transition: all 0.3s ease;
   `
-
-  console.log('Showing notification:', message)
 
   notification.textContent = message
   document.body.appendChild(notification)
@@ -169,5 +132,4 @@ function showNotification(message: string): void {
   }, 4000)
 }
 
-// Initialize content script
 initialize()

@@ -2,6 +2,7 @@ import type { PageInfo } from '@/types'
 import { Readability } from '@mozilla/readability'
 import TurndownService from 'turndown'
 import { gfm } from 'turndown-plugin-gfm'
+import setNotification from './Notification'
 
 interface ArticleData {
   title: string
@@ -25,12 +26,14 @@ const getPageInfo = (): Promise<PageInfo> => {
   return new Promise((resolve, reject) => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
       if (!tabs || tabs.length === 0) {
-        reject(new Error('No active tab found'))
+        setNotification('No active tab found to get page info', 'error')
+        reject()
         return
       }
       const tabId = tabs[0]?.id
       if (!tabId) {
-        reject(new Error('No active tab found'))
+        setNotification('No active tab found to get page info', 'error')
+        reject()
         return
       }
 
@@ -40,7 +43,11 @@ const getPageInfo = (): Promise<PageInfo> => {
           { type: 'GET_PAGE_INFO' },
           (response) => {
             if (chrome.runtime.lastError) {
-              console.error('Runtime error:', chrome.runtime.lastError.message)
+              setNotification(
+                'Runtime error in getting page info: ' +
+                  chrome.runtime.lastError.message,
+                'error',
+              )
               reject(chrome.runtime.lastError)
               return
             }
@@ -48,13 +55,19 @@ const getPageInfo = (): Promise<PageInfo> => {
               const pageInfo: PageInfo = response.data
               resolve(pageInfo)
             } else {
-              console.warn('❌ Failed to Get Page Info:', response?.error)
+              setNotification(
+                'Failed to Get Page Info: ' + response?.error,
+                'error',
+              )
               reject(response?.error)
             }
           },
         )
       } catch (err) {
-        console.error('Unexpected error in Getting Page Info:', err)
+        setNotification(
+          'Unexpected error in Getting Page Info: ' + err,
+          'error',
+        )
         reject(err)
       }
     })
@@ -80,7 +93,7 @@ export async function htmlPageToMarkdown(): Promise<MarkdownData> {
     }
   }
   if (newTitle.length > 100) {
-    newTitle = newTitle.slice(0, 100).trim() + '...'
+    newTitle = newTitle.slice(0, 100).trim()
   }
 
   const article = await extractArticleContent(html, url)
@@ -217,6 +230,7 @@ async function extractArticleContent(
   const article = reader.parse()
 
   if (!article) {
+    setNotification('Could not extract article content', 'error')
     throw new Error('Could not extract article content')
   }
 

@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import type { AppDispatch, RootState } from "../store";
 import { initializeStates } from "@/services/background";
 import { Bug, Github, MessageSquarePlus } from "lucide-react";
+import setNotification from "@/utils/Notification";
 
 const Popup: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -37,8 +38,11 @@ const Popup: React.FC = () => {
     const init = async () => {
       try {
         await initializeStates(dispatch);
-      } catch (error) {
-        console.error("Error initializing states:", error);
+      } catch (error) { 
+        setNotification(
+          "Failed to initialize states: " + error,
+          "error"
+        );
       }
     };
 

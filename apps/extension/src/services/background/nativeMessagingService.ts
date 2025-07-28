@@ -1,85 +1,100 @@
-export function createNativeMessagingService(
-  hostName = "com.obsidianplus.host"
-) {
-  let port: chrome.runtime.Port | null = null;
-  let connected = false;
+import setNotification from '@/utils/Notification'
 
-  const isConnected = () => connected && port !== null;
+export function createNativeMessagingService(
+  hostName = 'com.obsidianplus.host',
+) {
+  let port: chrome.runtime.Port | null = null
+  let connected = false
+
+  const isConnected = () => connected && port !== null
 
   const connect = async (): Promise<void> => {
     return new Promise((resolve, reject) => {
       try {
-        port = chrome.runtime.connectNative(hostName);
+        port = chrome.runtime.connectNative(hostName)
 
         port.onMessage.addListener((message) => {
-          console.log("Received from native host:", message);
-        });
+          setNotification(
+            'Received message from native host: ' + JSON.stringify(message),
+            'info',
+          )
+        })
 
         port.onDisconnect.addListener(() => {
-          // console.log("Native messaging disconnected");
-          connected = false;
+          setNotification('Native messaging port disconnected', 'info')
+          connected = false
 
           if (chrome.runtime.lastError) {
-            reject(new Error(chrome.runtime.lastError.message));
+            setNotification(
+              'Error: ' + chrome.runtime.lastError.message,
+              'error',
+            )
+            reject()
           }
-        });
+        })
 
         port.postMessage({
-          type: "connection_test",
+          type: 'connection_test',
           payload: { timestamp: Date.now() },
           timestamp: Date.now(),
-        });
+        })
 
-        connected = true;
-        resolve();
+        connected = true
+        resolve()
       } catch (error) {
-        console.error("Failed to connect to native host:", error);
-        reject(error);
+        setNotification('Failed to connect to native host: ' + error, 'error')
+        reject(error)
       }
-    });
-  };
+    })
+  }
 
   const disconnect = () => {
     if (port) {
-      port.disconnect();
-      port = null;
-      connected = false;
+      port.disconnect()
+      port = null
+      connected = false
     }
-  };
+  }
 
   const sendMessage = async (message: any): Promise<any> => {
     return new Promise((resolve, reject) => {
       if (!isConnected()) {
-        return reject(new Error("Not connected to native host"));
+        setNotification('Native host is not connected', 'error')
+        return reject()
       }
 
-      const messageId = `msg_${Date.now()}_${Math.random()}`;
-      const messageWithId = { ...message, messageId };
+      const messageId = `msg_${Date.now()}_${Math.random()}`
+      const messageWithId = { ...message, messageId }
 
       const responseHandler = (response: any) => {
-        if (response.messageId === messageId || response.type === "pong") {
-          resolve(response);
+        if (response.messageId === messageId || response.type === 'pong') {
+          resolve(response)
         }
-      };
+      }
 
-      port!.onMessage.addListener(responseHandler);
+      port!.onMessage.addListener(responseHandler)
 
-      port!.postMessage(messageWithId);
+      port!.postMessage(messageWithId)
 
       setTimeout(() => {
         if (port) {
-          port.onMessage.removeListener(responseHandler);
+          port.onMessage.removeListener(responseHandler)
         }
-        reject(new Error("Message timeout"));
-      }, 10000);
-    });
-  };
+        setNotification(
+          'No response from native host for message: ' +
+            JSON.stringify(message),
+          'warning',
+        )
+        reject()
+      }, 1 * 60 * 1000)
+    })
+  }
   return {
     connect,
     disconnect,
     isConnected,
     sendMessage,
-  };
+  }
 }
 
-export const nativeMessaging = createNativeMessagingService();
+export const nativeMessaging = createNativeMessagingService()

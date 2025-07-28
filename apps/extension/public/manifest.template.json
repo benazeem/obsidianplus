@@ -37,7 +37,7 @@
     "service_worker": "background.js",
     "type": "module"
   },
-  "host_permissions": [ 
+  "host_permissions": [
     "https://login.microsoftonline.com/*",
     "https://graph.microsoft.com/*",
     "https://www.dropbox.com/*",
@@ -53,7 +53,7 @@
   ],
   "web_accessible_resources": [
     {
-      "resources": ["vault-picker.html", "index.html"],
+      "resources": ["settings.html", "popup.html"],
       "matches": ["<all_urls>"]
     }
   ]

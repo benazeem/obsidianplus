@@ -24,7 +24,7 @@
     "three": "^0.178.0"
   },
   "devDependencies": {
-      "@obsidianplus/tsconfig": "workspace:*",
+    "@obsidianplus/tsconfig": "workspace:*",
     "@tanstack/eslint-config": "^0.1.0",
     "@testing-library/dom": "^10.4.0",
     "@testing-library/react": "^16.2.0",

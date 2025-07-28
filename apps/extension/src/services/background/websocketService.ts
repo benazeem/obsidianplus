@@ -1,3 +1,5 @@
+import setNotification from '@/utils/Notification'
+
 type MessageHandlerMap = Map<string, (response: any) => void>
 
 export function createWebSocketService() {
@@ -21,19 +23,26 @@ export function createWebSocketService() {
             const message = JSON.parse(event.data)
             handleMessage(message)
           } catch (error) {
-            console.error('Error parsing WebSocket message:', error)
+            setNotification(
+              'Error parsing WebSocket message: ' + error,
+              'error',
+            )
           }
         }
 
         ws.onclose = () => {
-          console.log('WebSocket disconnected from host')
+          setNotification('WebSocket disconnected from host', 'info')
           connected = false
         }
 
         ws.onerror = (error) => {
-          console.error('WebSocket error:', error)
+          setNotification('WebSocket error: ' + error, 'error')
           connected = false
-          reject(new Error('WebSocket connection failed'))
+          setNotification(
+            'WebSocket connection failed. Please ensure the host is running.',
+            'error',
+          )
+          reject()
         }
       } catch (error) {
         reject(error)
@@ -56,7 +65,8 @@ export function createWebSocketService() {
   function sendMessage(message: any): Promise<any> {
     return new Promise((resolve, reject) => {
       if (!isConnected()) {
-        reject(new Error('WebSocket not connected'))
+        setNotification('WebSocket is not connected', 'error')
+        reject()
         return
       }
 
@@ -71,7 +81,8 @@ export function createWebSocketService() {
         () => {
           if (messageHandlers.has(messageId)) {
             messageHandlers.delete(messageId)
-            reject(new Error('WebSocket message timeout'))
+            setNotification('WebSocket message timeout', 'error')
+            reject()
           }
         },
         2 * 60 * 1000,

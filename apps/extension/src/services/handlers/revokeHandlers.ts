@@ -2,69 +2,100 @@ import {
   setDropboxConnected,
   setDropboxFolders,
   setDropboxUserInfo,
-} from "@/features/dropboxSlice";
+} from '@/features/dropboxSlice'
 import {
   setGoogleDriveConnected,
   setGoogleDriveFolders,
   setGoogleDriveUserInfo,
-} from "@/features/googleDriveSlice";
+} from '@/features/googleDriveSlice'
+import { showNotification } from '@/features/notificationSlice'
 import {
   setOneDriveConnected,
   setOneDriveFolders,
   setOneDriveUserInfo,
-} from "@/features/oneDriveSlice";
+} from '@/features/oneDriveSlice'
 import {
   revokeDropboxAuth,
   revokeGDriveConnection,
   revokeOneDriveConnection,
-} from "@/services/background";
-import type { AppDispatch } from "@/store";
+} from '@/services/background'
+import type { AppDispatch } from '@/store'
 
 export default function disconnectCloud(cloud: string, dispatch: AppDispatch) {
   switch (cloud) {
-    case "gdrive":
-      return disconnectGoogleDrive(dispatch);
-    case "onedrive":
-      return disconnectOneDrive(dispatch);
-    case "dropbox":
-      return disconnectDropbox(dispatch);
+    case 'gdrive':
+      return disconnectGoogleDrive(dispatch)
+    case 'onedrive':
+      return disconnectOneDrive(dispatch)
+    case 'dropbox':
+      return disconnectDropbox(dispatch)
     default:
-      throw new Error("Unsupported cloud storage type");
+      throw new Error('Unsupported cloud storage type')
   }
 }
 
 const disconnectGoogleDrive = async (dispatch: AppDispatch) => {
   try {
-    await revokeGDriveConnection();
-    console.log("Google Drive disconnected successfully");
-    dispatch(setGoogleDriveConnected(false));
-    dispatch(setGoogleDriveFolders([]));
-    dispatch(setGoogleDriveUserInfo(null));
-  } catch (error) {
-    console.error("Error disconnecting Google Drive:", error);
+    await revokeGDriveConnection()
+    dispatch(
+      showNotification({
+        message: 'Google Drive disconnected successfully',
+        type: 'info',
+      }),
+    )
+    dispatch(setGoogleDriveConnected(false))
+    dispatch(setGoogleDriveFolders([]))
+    dispatch(setGoogleDriveUserInfo(null))
+  } catch {
+    dispatch(
+      showNotification({
+        message: 'Error disconnecting Google Drive:',
+        type: 'error',
+      }),
+    )
   }
-};
+}
 
 const disconnectOneDrive = async (dispatch: AppDispatch) => {
   try {
-    await revokeOneDriveConnection();
-    console.log("OneDrive disconnected successfully.");
-    dispatch(setOneDriveConnected(false));
-    dispatch(setOneDriveFolders([]));
-    dispatch(setOneDriveUserInfo(null));
-  } catch (error) {
-    console.error("Error disconnecting OneDrive:", error);
+    await revokeOneDriveConnection()
+    dispatch(
+      showNotification({
+        message: 'OneDrive disconnected successfully',
+        type: 'info',
+      }),
+    )
+    dispatch(setOneDriveConnected(false))
+    dispatch(setOneDriveFolders([]))
+    dispatch(setOneDriveUserInfo(null))
+  } catch {
+    dispatch(
+      showNotification({
+        message: 'Error disconnecting OneDrive:',
+        type: 'error',
+      }),
+    )
   }
-};
+}
 
 const disconnectDropbox = async (dispatch: AppDispatch) => {
   try {
-    await revokeDropboxAuth();
-    console.log("Dropbox disconnected successfully.");
-    dispatch(setDropboxConnected(false));
-    dispatch(setDropboxFolders([]));
-    dispatch(setDropboxUserInfo(null));
-  } catch (error) {
-    console.error("Error disconnecting Dropbox:", error);
+    await revokeDropboxAuth()
+    dispatch(
+      showNotification({
+        message: 'Dropbox disconnected successfully',
+        type: 'info',
+      }),
+    )
+    dispatch(setDropboxConnected(false))
+    dispatch(setDropboxFolders([]))
+    dispatch(setDropboxUserInfo(null))
+  } catch {
+    dispatch(
+      showNotification({
+        message: 'Error disconnecting Dropbox:',
+        type: 'error',
+      }),
+    )
   }
-};
+}

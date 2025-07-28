@@ -6,6 +6,7 @@ import {
   loadUIState,
 } from "@/features";
 import {type AppDispatch } from "@/store";
+import setNotification from "@/utils/Notification";
 
 export const initializeStates = async (dispatch: AppDispatch) => {
   try {
@@ -16,6 +17,9 @@ export const initializeStates = async (dispatch: AppDispatch) => {
     await dispatch(loadDropboxState()).unwrap();
     await dispatch(loadUIState()).unwrap();
   } catch (error) {
-    console.error('Initialization failed:', error);   
+    setNotification(
+      "Failed to initialize states: " + error,
+      "error"
+    );
   }
 };

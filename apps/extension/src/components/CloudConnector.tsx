@@ -13,7 +13,7 @@ import { default as handleCloudRefresh } from "@/services/handlers/refreshConnec
 import { default as handleCloudFileRefresh } from "@/services/handlers/fileRefreshHandlers";
 import { default as handleCloudConnect } from "@/services/handlers/connectHandlers";
 import { default as handleCloudDisconnect } from "@/services/handlers/revokeHandlers";
-import type { AppDispatch, RootState } from "@/store";
+import type { AppDispatch, RootState } from "@/store"; 
 
 function CloudConnector({
   cloud,
@@ -23,7 +23,7 @@ function CloudConnector({
   setCloud: (cloud: "onedrive" | "dropbox" | "gdrive" | null) => void;
 }) {
   const connectorRef = useRef<HTMLDivElement>(null);
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useDispatch<AppDispatch>(); 
 
   const authenticated = useSelector((state: RootState) => {
     if (cloud === "gdrive") {

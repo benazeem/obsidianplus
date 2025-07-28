@@ -75,14 +75,6 @@ const FolderAccordionItem: React.FC<{
               >
                 + Page Markdown
               </DropdownMenuItem>
-              {/* <DropdownMenuItem
-                onClick={() =>
-                  handlePageAdd({ output: 'capture', location, folder })
-                }
-              >
-                + Capture Page
-              </DropdownMenuItem> */}{' '}
-              {/* This feature will be implemented later in future */}
               <DropdownMenuItem
                 onClick={() =>
                   handlePageAdd({ output: 'metaData', location, folder })

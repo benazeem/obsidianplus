@@ -1,3 +1,5 @@
+import setNotification from './Notification'
+
 export async function checkHostStatus() {
   try {
     interface HostPingResponse {
@@ -7,13 +9,16 @@ export async function checkHostStatus() {
     }
 
     const response = await new Promise<HostPingResponse>((resolve, reject) => {
-      console.log('Ping: Checking host status...')
+      setNotification('Ping: Checking host status...', 'info')
       chrome.runtime.sendMessage(
         { type: 'PING_HOST' },
         (response: HostPingResponse) => {
           if (chrome.runtime.lastError) {
-            console.error('Runtime error:', chrome.runtime.lastError?.message)
-            reject(new Error('Host is not connected'))
+            setNotification(
+              '❌ Could not ping host: ' + chrome.runtime.lastError.message,
+              'error',
+            ) 
+            reject()
             return {
               success: false,
               error: 'Host is not connected: Click on Monitor icon to retry',
@@ -25,7 +30,7 @@ export async function checkHostStatus() {
     })
     return response
   } catch (err) {
-    console.error('Unexpected error in hostStatusCheck:', err)
+    setNotification('Unexpected error in checking host status: ' + err, 'error')
     return {
       success: false,
       error: 'Host is not connected: Click on Monitor icon to retry',

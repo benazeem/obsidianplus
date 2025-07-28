@@ -1,11 +1,13 @@
 import { htmlPageToMarkdown } from '@/utils/markdownConverter'
 import saveCloudFile from './saveFileHanlders'
 import type { FolderEntry } from '@/types'
+import setNotification from '@/utils/Notification'
 
 function sanitizeFileName(name: string): string {
   return name
-    .replace(/[:*?"<>|\\/]/g, '') // remove illegal characters
-    .replace(/\s+/g, ' ') // collapse spaces
+    .replace(/[:*?"<>|\\/]/g, '')
+    .replace(/[^a-zA-Z0-9\-_. ]/g, '')
+    .replace(/\s+/g, ' ')
     .trim()
 }
 
@@ -15,7 +17,11 @@ type HandlePageAddParams = {
   folder: FolderEntry
 }
 
-export const handlePageAdd = async ({ output, location, folder }: HandlePageAddParams) => {
+export const handlePageAdd = async ({
+  output,
+  location,
+  folder,
+}: HandlePageAddParams) => {
   const pageMarkdown = await htmlPageToMarkdown()
   let fileContent = pageMarkdown.markdown
   const fileName =
@@ -24,14 +30,14 @@ export const handlePageAdd = async ({ output, location, folder }: HandlePageAddP
       : `Untitled_${new Date().toISOString().split('T')[0]}.md`
 
   if (output === 'capture') {
-    console.log('Capturing full page content...')
+    setNotification('Capturing full page content...', 'info')
     const tab = await new Promise<chrome.tabs.Tab | undefined>((resolve) => {
       chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
         resolve(tabs && tabs.length > 0 ? tabs[0] : undefined)
       })
     })
     if (!tab) {
-      console.error('No active tab found')
+      setNotification('No active tab found to capture full page', 'error')
       return
     }
     const response = await new Promise<any>((resolve) => {
@@ -40,7 +46,11 @@ export const handlePageAdd = async ({ output, location, folder }: HandlePageAddP
         { type: 'CAPTURE_FULL_PAGE' },
         (resp) => {
           if (chrome.runtime.lastError) {
-            console.error('Runtime error:', chrome.runtime.lastError.message)
+            setNotification(
+              'Runtime error in capturing full page: ' +
+                chrome.runtime.lastError.message,
+              'error',
+            )
             resolve(undefined)
             return
           }
@@ -48,24 +58,24 @@ export const handlePageAdd = async ({ output, location, folder }: HandlePageAddP
         },
       )
     })
-    console.log('Response from content script:', response)
     if (response?.success) {
       fileContent = response.data
-      console.log('Captured full page content:', fileContent)
+      setNotification('Full page content captured successfully', 'info')
     } else {
-      console.warn('❌ Failed to capture full page:', response?.error)
+      setNotification('Failed to capture full page content', 'warning')
+      return
     }
   }
   if (output === 'metaData') {
     const frontmatter = pageMarkdown.frontmatter
     fileContent = frontmatter
-    console.log('Captured metadata:', fileContent)
+    setNotification('Captured metadata successfully', 'info')
   }
 
   if (location === 'obsidian') {
     const sanitizedFileName = sanitizeFileName(fileName)
+    setNotification(`Saving file to Obsidian: ${sanitizedFileName}`, 'info')
     const filePath = `${folder.path}/${sanitizedFileName}`
-    console.log('Saving file to Obsidian:', filePath)
     try {
       chrome.runtime.sendMessage(
         {
@@ -74,20 +84,29 @@ export const handlePageAdd = async ({ output, location, folder }: HandlePageAddP
         },
         (response) => {
           if (chrome.runtime.lastError) {
-            console.error('Runtime error:', chrome.runtime.lastError.message)
+            setNotification(
+              'Runtime error in saving Obsidian file: ' +
+                chrome.runtime.lastError.message,
+              'error',
+            )
             return
           }
           if (response?.success) {
-            // console.log("File saved successfully:", response.data);
+            setNotification(
+              `File saved successfully to Obsidian: ${filePath}`,
+              'info',
+            )
           }
         },
       )
     } catch (error) {
-      console.error('Error saving file:', error)
+      setNotification(
+        'Unexpected error in saving Obsidian file: ' + error,
+        'error',
+      )
     }
   }
   if (location === 'googledrive') {
-    // console.log(`Saving file to ${location} folder:`, folder.name);
     saveCloudFile(location, {
       fileContent,
       fileName,

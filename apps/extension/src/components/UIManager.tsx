@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { ThemeToggle } from "./ThemeToggle";
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { ThemeToggle } from './ThemeToggle'
 import {
   DropdownMenuContent,
   DropdownMenuItem,
@@ -8,35 +8,51 @@ import {
   DropdownMenu,
   Input,
   Button,
-} from "@obsidianplus/ui";
-import type { RootState } from "@/store";
-import { setBackgroundImageUrl, setFontSize } from "@/features/uiSlice";
-import { CircleCheckBig, Trash } from "lucide-react";
+} from '@obsidianplus/ui'
+import type { RootState } from '@/store'
+import { setBackgroundImageUrl, setFontSize } from '@/features/uiSlice'
+import { CircleCheckBig, Trash } from 'lucide-react'
+import { showNotification } from '@/features/notificationSlice'
 
 function UIManager() {
   const background = useSelector(
-    (state: RootState) => state.ui.backgroundImageUrl
-  );
-  const [backgroundUrl, setBackgroundUrl] = useState<string>("");
-
-  const dispatch = useDispatch();
-  const fontSize = useSelector((state: RootState) => state.ui.fontSize);
+    (state: RootState) => state.ui.backgroundImageUrl,
+  )
+  const [backgroundUrl, setBackgroundUrl] = useState<string>('')
+  const dispatch = useDispatch()
+  const fontSize = useSelector((state: RootState) => state.ui.fontSize)
 
   const handleBackgroundChange = () => {
-    setBackgroundUrl("");
-    if (backgroundUrl && backgroundUrl.trim() !== "") {
+    setBackgroundUrl('')
+    if (backgroundUrl && backgroundUrl.trim() !== '') {
       try {
-        new URL(backgroundUrl);
-        dispatch(setBackgroundImageUrl(backgroundUrl));
-      } catch (error) {
-        console.error("Invalid URL format:", error);
-        alert("Please enter a valid URL for the background image.");
+        new URL(backgroundUrl)
+        dispatch(setBackgroundImageUrl(backgroundUrl))
+        dispatch(
+          showNotification({
+            message: 'Background image updated successfully.',
+            type: 'info',
+          }),
+        )
+      } catch {
+        dispatch(
+          showNotification({
+            message:
+              'Invalid URL format. Please enter a valid URL for the background image.',
+            type: 'warning',
+          }),
+        )
       }
     } else {
-      dispatch(setBackgroundImageUrl(null));
-      console.warn("Background URL is empty, using default.");
+      dispatch(setBackgroundImageUrl(null))
+      dispatch(
+        showNotification({
+          message: 'Background URL is empty, using default.(null)',
+          type: 'warning',
+        }),
+      )
     }
-  };
+  }
 
   return (
     <div aria-label="Theme & Appearance">
@@ -53,27 +69,36 @@ function UIManager() {
           <span>Font Size:</span>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" size={"sm"}>
-                {fontSize === "text-sm"
-                  ? "14px"
-                  : fontSize === "text-lg"
-                    ? "18px"
-                    : "16px"}
+              <Button variant="outline" size={'sm'}>
+                {fontSize === 'text-sm'
+                  ? '14px'
+                  : fontSize === 'text-lg'
+                    ? '18px'
+                    : '16px'}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
               <DropdownMenuItem
-                onClick={() => dispatch(setFontSize("text-sm"))}
+                onClick={() => {
+                  dispatch(setFontSize('text-sm'))
+                  dispatch(showNotification({ message: 'Font size changed to Small(14px).', type: 'info' }))
+                }}
               >
                 Small(14px)
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => dispatch(setFontSize("text-base"))}
+                onClick={() => {
+                  dispatch(setFontSize('text-base'))
+                  dispatch(showNotification({ message: 'Font size changed to Medium(16px).', type: 'info' }))
+                }}
               >
                 Medium(16px)
               </DropdownMenuItem>
               <DropdownMenuItem
-                onClick={() => dispatch(setFontSize("text-lg"))}
+                onClick={() => {
+                  dispatch(setFontSize('text-lg'))
+                  dispatch(showNotification({ message: 'Font size changed to Large(18px).', type: 'info' }))
+                }}
               >
                 Large(18px)
               </DropdownMenuItem>
@@ -87,7 +112,7 @@ function UIManager() {
               value={backgroundUrl}
               type="url"
               onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                setBackgroundUrl(e.target.value);
+                setBackgroundUrl(e.target.value)
               }}
               title="Enter a valid URL for the background image"
               className=" px-2 rounded outline-none shadow-none focus:outline-none"
@@ -104,7 +129,7 @@ function UIManager() {
           <Button
             className="bg-red-500  hover:bg-red-600"
             onClick={() => {
-              dispatch(setBackgroundImageUrl(null));
+              dispatch(setBackgroundImageUrl(null))
             }}
             title="Remove Background"
             disabled={!background}
@@ -114,7 +139,7 @@ function UIManager() {
         </div>
       </div>
     </div>
-  );
+  )
 }
 
-export default UIManager;
+export default UIManager

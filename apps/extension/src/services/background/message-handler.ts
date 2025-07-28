@@ -1,3 +1,4 @@
+import setNotification from '@/utils/Notification'
 import {
   type BackgroundContext,
   launchAndConnectToHost,
@@ -98,19 +99,22 @@ async function checkHostStatus(ctx: BackgroundContext) {
 async function pingHost(ctx: BackgroundContext) {
   const msg = { type: 'ping', payload: {}, timestamp: Date.now() }
   if (ctx.webSocket.isConnected()) return ctx.webSocket.sendMessage(msg)
-  throw new Error('No connection to host')
+
+  Notification()
 }
 
 async function getHostInfo(ctx: BackgroundContext) {
   const msg = { type: 'get_system_info', payload: {}, timestamp: Date.now() }
   if (ctx.webSocket.isConnected()) return ctx.webSocket.sendMessage(msg)
-  throw new Error('No connection to host')
+
+  Notification()
 }
 
 async function sendToHost(ctx: BackgroundContext, payload: any) {
   const msg = { type: 'custom_message', payload, timestamp: Date.now() }
   if (ctx.webSocket.isConnected()) return ctx.webSocket.sendMessage(msg)
-  throw new Error('No connection to host')
+
+  Notification()
 }
 
 async function scanVaults(
@@ -119,13 +123,15 @@ async function scanVaults(
 ) {
   const msg = { type: 'scanObsidianVaults', payload, timestamp: Date.now() }
   if (ctx.webSocket.isConnected()) return await ctx.webSocket.sendMessage(msg)
-  throw new Error('No connection to host')
+
+  Notification()
 }
 
 async function saveMarkdown(ctx: BackgroundContext, payload: any) {
   const msg = { type: 'saveMarkdownFile', payload, timestamp: Date.now() }
   if (ctx.webSocket.isConnected()) return ctx.webSocket.sendMessage(msg)
-  throw new Error('No connection to host')
+
+  Notification()
 }
 
 async function disconnectHost(ctx: BackgroundContext) {
@@ -133,5 +139,11 @@ async function disconnectHost(ctx: BackgroundContext) {
   if (ctx.webSocket.isConnected()) {
     return ctx.webSocket.sendMessage(msg)
   }
-  throw new Error('No connection to host')
+  Notification()
 }
+
+const Notification = () =>
+  setNotification(
+    'Host is not connected. Please launch the host first.',
+    'error',
+  )

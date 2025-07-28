@@ -1,63 +1,152 @@
-import { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import UIManager from "@/components/UIManager";
-import CloudManager from "../components/CloudManager";
-import { Input, Button } from "@obsidianplus/ui"; 
-import { Vault, X } from "lucide-react";
-import type { AppDispatch, RootState } from "@/store";
-import { removeObsidianVaultRoot } from "@/features/obsidianSlice";
-import { handleVaultAdd } from "@/services/handlers/handleVaultAdd";
-import { initializeStates } from "@/services/background";
-import { handleVaultSync } from "@/services/handlers/handleVaultSync";
+import { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import UIManager from '@/components/UIManager'
+import CloudManager from '../components/CloudManager'
+import { Input, Button } from '@obsidianplus/ui'
+import { Vault, X } from 'lucide-react'
+import type { AppDispatch, RootState } from '@/store'
+import {
+  addObsidianVaultRoot,
+  removeObsidianVaultRoot,
+  setObsidianFolders,
+} from '@/features/obsidianSlice'
+import { initializeStates } from '@/services/background'
+import SettingsNotification from '@/components/SettingsNotification'
+import { obsidianFolderTransformation } from '@/utils/obsidianFolderTransformation'
+import { showNotification } from '@/features/notificationSlice'
 
 function Settings() {
-  const [currentRootInput, setCurrentRootInput] = useState<string>("");
-  const dispatch = useDispatch<AppDispatch>();
-  const fontSize = useSelector((state: RootState) => state.ui.fontSize);
+  const [currentRootInput, setCurrentRootInput] = useState<string>('')
+  const dispatch = useDispatch<AppDispatch>()
+  const fontSize = useSelector((state: RootState) => state.ui.fontSize)
   const vaultRoots = useSelector(
-    (state: RootState) => state.obsidianVault.vaultRoots || []
-  );
-  const theme = useSelector((state: RootState) => state.ui.theme);
+    (state: RootState) => state.obsidianVault.vaultRoots || [],
+  )
+  const theme = useSelector((state: RootState) => state.ui.theme)
 
   const handleRemoveRoot = (root: string) => {
-    dispatch(removeObsidianVaultRoot(root));
-  };
+    dispatch(removeObsidianVaultRoot(root))
+    dispatch(
+      showNotification({
+        message: `Removed vault root: ${root}`,
+        type: 'info',
+      }),
+    )
+  }
+  const handleVaultAdd = () => {
+    if (!currentRootInput || currentRootInput.trim() === '') {
+      dispatch(
+        showNotification({
+          message: 'Vault root path is empty',
+          type: 'warning',
+        }),
+      )
+      return
+    }
+    const newRoots = currentRootInput.split(',').map((root) => root.trim())
+    if (newRoots.length === 0) {
+      dispatch(
+        showNotification({
+          message: 'No valid vault roots provided',
+          type: 'warning',
+        }),
+      )
+      return
+    }
+    newRoots.forEach((root) => {
+      dispatch(addObsidianVaultRoot(root))
+    })
+    setCurrentRootInput('')
+  }
+  const handleVaultSync = async () => {
+    if (!vaultRoots || vaultRoots.length === 0) {
+      dispatch(
+        showNotification({
+          message: 'No vault root provided',
+          type: 'warning',
+        }),
+      )
+      return
+    }
+    try {
+      chrome.runtime.sendMessage(
+        { type: 'SCAN_VAULTS', payload: { vaultRoot: vaultRoots } },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            dispatch(
+              showNotification({
+                message: 'Runtime error: ' + chrome.runtime.lastError.message,
+                type: 'error',
+              }),
+            )
+            return
+          }
+          if (response?.success) {
+            const vaults = response.data
+            const obsidianFolders = obsidianFolderTransformation(vaults)
+            dispatch(setObsidianFolders(obsidianFolders))
+            dispatch(
+              showNotification({
+                message: 'Vaults synced successfully',
+                type: 'info',
+              }),
+            )
+          } else {
+            dispatch(
+              showNotification({
+                message: 'Vault scan failed: ' + response?.error,
+                type: 'error',
+              }),
+            )
+          }
+        },
+      )
+    } catch (err) {
+      dispatch(
+        showNotification({
+          message: 'Unexpected error in Vault Sync: ' + err,
+          type: 'error',
+        }),
+      )
+    }
+  }
 
   useEffect(() => {
-    const root = window.document.documentElement;
+    const root = window.document.documentElement
 
-    root.classList.remove("light", "dark");
+    root.classList.remove('light', 'dark')
 
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+    if (theme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
         .matches
-        ? "dark"
-        : "light";
+        ? 'dark'
+        : 'light'
 
-      root.classList.add(systemTheme);
-      return;
+      root.classList.add(systemTheme)
+      return
     }
 
-    root.classList.add(theme);
-  }, [theme]);
+    root.classList.add(theme)
+  }, [theme])
 
   useEffect(() => {
     const init = async () => {
       try {
-        await initializeStates(dispatch);
+        await initializeStates(dispatch)
       } catch (error) {
-        console.error("Error initializing states:", error);
+        console.error('Error initializing states:', error)
       }
-    };
+    }
 
-    init();
-  }, [dispatch]);
+    init()
+  }, [dispatch])
 
   return (
     <>
       <div
         className={`w-full ${fontSize} bg-gray-100 dark:bg-gray-900 h-screen overflow-hidden flex flex-col items-center justify-start`}
       >
+        <SettingsNotification />
         <div className="w-full flex flex-col items-center justify-center p-4 text-center bg-gray-300 dark:bg-gray-950 shadow-md rounded-lg">
           <h1 className="text-3xl font-bold mb-4 ">Settings</h1>
           <p>This is the settings page for the Obsidian+ extension.</p>
@@ -79,29 +168,27 @@ function Settings() {
                   placeholder="Enter vault root directory"
                   title="Vault Root"
                   className="w-40 flex-1 p-2 rounded outline-none shadow-none"
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => setCurrentRootInput(e.target.value)}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    setCurrentRootInput(e.target.value)
+                  }
                 />
               </label>
               <Button
                 className=" bg-blue-500  hover:bg-blue-600 flex-shrink-0"
                 title="Add Vault"
                 type="button"
-                disabled={!currentRootInput.trim()} 
+                disabled={!currentRootInput.trim()}
                 onClick={() => {
-                  handleVaultAdd({
-                    path: currentRootInput,
-                    dispatch,
-                    setPath: setCurrentRootInput,
-                  });
+                  handleVaultAdd()
                 }}
               >
                 Add Vault <Vault size={16} className="ml-1" />
               </Button>
               <Button
                 className="bg-green-500  hover:bg-green-600 flex-shrink-0"
-                disabled={vaultRoots.length === 0} 
+                disabled={vaultRoots.length === 0}
                 onClick={() => {
-                  handleVaultSync({ vaultRoots, dispatch });
+                  handleVaultSync()
                 }}
                 title="Scan Vaults"
               >
@@ -111,7 +198,7 @@ function Settings() {
             </div>
             <div>
               <p className="text-sm text-gray-600 dark:text-gray-200 mb-2">
-                Example: <code>/path/to/obsidian/vaults</code> or{" "}
+                Example: <code>/path/to/obsidian/vaults</code> or{' '}
                 <code>/path/to/obsidian/vault1,/path/to/obsidian/vault2</code>
               </p>
               <div className="flex flex-wrap gap-3 ">
@@ -144,7 +231,7 @@ function Settings() {
         </div>
       </div>
     </>
-  );
+  )
 }
 
-export default Settings;
+export default Settings

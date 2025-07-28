@@ -45,7 +45,7 @@ function Install() {
         'Obsidian Plus Native Messaging Host: Native host for Obsidian Plus Chrome extension',
       path: `obsidianPlus.${EXE_EXTENSION}`,
       type: 'stdio',
-      allowed_origins: ['chrome-extension://nigamflpdbfeopojphaajkmamkbjagfh'],
+      allowed_origins: ['chrome-extension://nbeeifpffimepiobjmhpfihileadikdo/'],
     }
 
     const batFile = ` @echo off
@@ -206,7 +206,7 @@ echo "✅ Obsidian Plus Host started."
           )}
           {formData.Step === 4 && formData.os === 'windows' && (
             <div className="flex flex-col items-center justify-center gap-4 md:gap-6 lg:gap-8 w-full lg:w-[80%]">
-              <p className='break-all'>
+              <p className="break-all">
                 Extract the manifest zip files in the following location:&nbsp;
                 <span className="text-blue-300 font-semibold">
                   &nbsp;{manifestPath[formData.os]}

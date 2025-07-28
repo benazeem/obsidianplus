@@ -1,3 +1,4 @@
+import setNotification from '@/utils/Notification'
 import { handleMessage } from './message-handler'
 import type { createNativeMessagingService } from './nativeMessagingService'
 import { createWebSocketService } from './websocketService'
@@ -20,22 +21,22 @@ export function initBackgroundService(): void {
   })
 
   chrome.runtime.onStartup.addListener(() => {
-    console.log('Extension started')
+    setNotification('Extension started', 'info')
     launchAndConnectToHost(ctx)
   })
 
   chrome.runtime.onInstalled.addListener(() => {
-    console.log('Extension installed')
+    setNotification('Extension installed', 'info')
     chrome.tabs.create({ url: 'https://obsidianplus.devazeem.me/install' })
     launchAndConnectToHost(ctx)
   })
 
   chrome.runtime.onSuspend.addListener(() => {
-    console.log('Extension suspended')
+    setNotification('Extension suspended', 'info')
   })
 
   chrome.runtime.onUpdateAvailable.addListener(() => {
-    console.log('Extension update available')
+    setNotification('Extension update available', 'info')
     // chrome.tabs.create({ url: 'https://obsidianplus.devazeem.me/updates' })
   })
 }
@@ -44,7 +45,7 @@ export async function launchAndConnectToHost(
   ctx: BackgroundContext,
 ): Promise<void> {
   if (ctx.webSocket.isConnected()) {
-    console.log('Host already launched and connected.')
+    setNotification('Host already launched and connected.', 'info')
     return
   }
 
@@ -52,7 +53,7 @@ export async function launchAndConnectToHost(
     startNativeHost()
     await connectViaWebSocket(ctx)
   } catch (error) {
-    console.warn('WebSocket failed', error)
+    setNotification('Failed to connect to host: ' + error, 'warning')
   }
 }
 
@@ -68,17 +69,23 @@ let port: chrome.runtime.Port | null = null
 export function startNativeHost() {
   port = chrome.runtime.connectNative('com.obsidianplus.host')
   ctx.hostLaunched = true
-  // console.log("Native messaging port initialized:");
+  setNotification('Native messaging host connected', 'info')
 
   port.onDisconnect.addListener(() => {
-    // console.log("Native messaging port disconnected");
+    setNotification('Native messaging port disconnected', 'info')
     if (chrome.runtime.lastError) {
-      throw new Error(chrome.runtime.lastError.message)
+      setNotification(
+        'Error: ' + chrome.runtime.lastError.message,
+        'error',
+      )
     }
     port = null
   })
 
   port.onMessage.addListener((message) => {
-    console.log('Received message from native host:', message)
+    setNotification(
+      'Received message from native host: ' + JSON.stringify(message),
+      'info',
+    )
   })
 }

@@ -8,7 +8,9 @@ import {
   connectDropbox,
 } from '@/services/handlers/connectHandlers'
 import Icons from '../../public/icons.json'
-import { handleVaultSync } from '@/services/handlers/handleVaultSync' 
+import setNotification from '@/utils/Notification'
+import { setObsidianFolders } from '@/features'
+import { obsidianFolderTransformation } from '@/utils/obsidianFolderTransformation'
 function PopupHead() {
   const [hostConnected, setHostConnected] = useState<boolean>(false)
   const [hostStatus, setHostStatus] = useState<string | null>('Loading ...')
@@ -31,14 +33,47 @@ function PopupHead() {
     chrome.runtime.openOptionsPage()
   }
 
- const handleVaultRefresh = () => {
-    handleVaultSync({
-      vaultRoots,
-      dispatch,
-    })
+  const handleVaultRefresh = () => {
+    if (!vaultRoots || vaultRoots.length === 0) {
+      setNotification('No vault root provided', 'warning')
+      return
+    }
+    try {
+      chrome.runtime.sendMessage(
+        { type: 'SCAN_VAULTS', payload: { vaultRoot: vaultRoots } },
+        (response) => {
+          if (chrome.runtime.lastError) {
+            setNotification(
+              'Runtime error:' + chrome.runtime.lastError.message,
+              'error',
+            )
+            return
+          }
+          if (response?.success) {
+            const vaults = response.data
+            const obsidianFolders = obsidianFolderTransformation(vaults)
+            dispatch(setObsidianFolders(obsidianFolders))
+            setNotification('Vaults synced successfully', 'info')
+          } else {
+            setNotification('Vault scan failed: ' + response?.error, 'error')
+            return
+          }
+          if (response?.success) {
+            const vaults = response.data
+            const obsidianFolders = obsidianFolderTransformation(vaults)
+            dispatch(setObsidianFolders(obsidianFolders))
+            setNotification('Vaults synced successfully', 'info')
+          } else {
+            setNotification('Vault scan failed: ' + response?.error, 'error')
+          }
+        },
+      )
+    } catch (err) {
+      setNotification('Unexpected error in  Vault Sync: ' + err, 'error')
+    }
   }
 
-    const handleReconnectHost = async () => {
+  const handleReconnectHost = async () => {
     setTimeout(() => {}, 1000) // Small delay to avoid rapid reconnection attempts
     setHostStatus('Please wait...')
     setHostConnected(true)
@@ -46,7 +81,10 @@ function PopupHead() {
       { type: 'LAUNCH_HOST', payload: {} },
       (response) => {
         if (chrome.runtime.lastError) {
-          console.error('Runtime error:', chrome.runtime.lastError.message)
+          setNotification(
+            'Failed to launch host: ' + chrome.runtime.lastError.message,
+            'error',
+          )
           setHostConnected(false)
           setHostStatus('Failed to launch host')
           return
@@ -54,11 +92,12 @@ function PopupHead() {
         if (response?.success) {
           setHostConnected(true)
           setHostStatus('Reconnecting to host...')
+          setNotification('Reconnecting to host...', 'info')
           setTimeout(() => {
             handleHostConnection()
           }, 1000)
         } else {
-          console.warn('❌ Could not launch host:', response?.error)
+          setNotification('Failed to launch host: Check Host Settings', 'error')
           setHostConnected(false)
           setHostStatus('Failed to launch host: Check Host Settings')
         }
@@ -67,31 +106,40 @@ function PopupHead() {
   }
 
   const handleHostConnection = useCallback(() => {
+    setNotification('Checking host connection...', 'info')
     console.log('Checking host connection...')
     try {
       chrome.runtime.sendMessage({ type: 'GET_HOST_INFO' }, (response) => {
         if (chrome.runtime.lastError) {
-          console.error('Runtime error:', chrome.runtime.lastError.message)
+          setNotification(
+            '❌ Could not get host status: ' + chrome.runtime.lastError.message,
+            'error',
+          )
           setHostConnected(false)
           setHostStatus('Host is not connected: Click on Monitor icon to retry')
+
           return
         }
         if (response && response?.success) {
           const { platform, hostname } = response.data
           setHostConnected(true)
           setHostStatus(`✅ Host connected to ${hostname} (${platform})`)
+          setNotification(`Host connected to ${hostname} (${platform})`, 'info')
         } else {
-          console.warn('❌ Could not get host status:', response?.error)
+          setNotification('❌ Could not get host status:', 'error')
           setHostConnected(false)
           setHostStatus('Host is not connected: Click on Monitor icon to retry')
         }
       })
     } catch (err) {
-      console.error('Unexpected error in handleHostConnection:', err)
+      setNotification(
+        'Unexpected error in checking host connection: ' + err,
+        'error',
+      )
       setHostConnected(false)
       setHostStatus('Host is not connected: Click on Monitor icon to retry')
     }
-  }, []) 
+  }, [])
   useEffect(() => {
     handleHostConnection()
   }, [handleHostConnection])
