@@ -1,6 +1,7 @@
 {
   "extends": "@obsidianplus/tsconfig/tsconfig.app.json",
    "compilerOptions": {
+    "jsx": "react-jsx",
     "types": ["vite/client"],
     "baseUrl": ".",
     "paths": {

@@ -55,10 +55,14 @@ const TermsOfService = () => {
           className="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 p-8 md:p-12 text-left"
         >
           <div className="prose prose-invert max-w-none">
-            <p className="text-md md:text-lg text-gray-200 mb-8">{termsData.intro}</p>
+            <p className="text-md md:text-lg text-gray-200 mb-8">
+              {termsData.intro}
+            </p>
             <div className="space-y-8">
               {termsData.sections.map((section, i) => {
-                const Icon = section.icon ? icons[section.icon] : null
+                const Icon = section.icon
+                  ? icons[section.icon as keyof typeof icons]
+                  : null 
                 const delay = 0.1 * i
 
                 // Special section (warranty/liability)

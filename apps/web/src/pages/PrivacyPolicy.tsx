@@ -1,8 +1,9 @@
+import * as React from 'react'
 import { motion } from 'motion/react'
 import { Cloud, Database, Eye, Lock, Mail, Shield } from 'lucide-react'
 import privacyPolicyData from '../data/privacyPolicy.json'
 
-const iconMap: Record<string, JSX.Element> = {
+const iconMap: Record<string, React.JSX.Element> = {
   Database: <Database className="w-6 h-6 text-blue-400" />,
   Eye: <Eye className="w-6 h-6 text-red-400" />,
   Lock: <Lock className="w-6 h-6 text-green-400" />,

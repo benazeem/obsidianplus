@@ -12,8 +12,7 @@
     "format": "prettier",
     "check": "prettier --write . && eslint --fix"
   },
-  "dependencies": {
-    "@obsidianplus/ui": "workspace:*",
+  "dependencies": { 
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-router": "^1.121.2",
     "@tanstack/react-router-devtools": "^1.121.2",
