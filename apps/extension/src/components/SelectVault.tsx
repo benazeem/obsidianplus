@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { FolderInput, Plus, X } from 'lucide-react'
+import { Download, FolderInput, Plus, X } from 'lucide-react'
 import type { AppDispatch, RootState } from '@/store'
 import { setObsidianInputInterface } from '@/features/uiSlice'
 import { Button } from '@obsidianplus/ui'
@@ -135,6 +135,18 @@ function SelectVault() {
             ))}
           </div>
         ) : null}
+        <div className="flex items-center justify-center mt-4">
+          <a
+            className=" w-full p-2 flex items-center bg-blue-500 hover:bg-blue-600 text-white rounded-md gap-1"
+            title="Download Host"
+            type="button"
+            href="https://obsidianplus.devazeem.me/install"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Download Host <Download size={16} className="ml-1" />
+          </a>
+        </div>
       </div>
     </>
   )

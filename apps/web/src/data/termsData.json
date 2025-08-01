@@ -1,0 +1,72 @@
+{
+  "title": "Terms of Service",
+  "effectiveDate": "August 1, 2025",
+  "intro": "These Terms of Service (\"Terms\") govern your use of the Obsidian+ Web Clipper browser extension and associated services (\"Service\"). By using the Service, you agree to these Terms.",
+  "sections": [
+    {
+      "id": 1,
+      "title": "Use of Service",
+      "icon": "Users",
+      "iconColor": "text-blue-400",
+      "iconBg": "bg-blue-500/20",
+      "content": "Obsidian+ Web Clipper allows you to capture and save content from the web to your local Obsidian vault or linked cloud storage. You are responsible for using the Service in compliance with all applicable laws and regulations."
+    },
+    {
+      "id": 2,
+      "title": "User Data",
+      "icon": "Shield",
+      "iconColor": "text-green-400",
+      "iconBg": "bg-green-500/20",
+      "content": "We do not collect or store personal data unless you explicitly authorize cloud storage integration (e.g., Google Drive). Even in such cases, data is accessed securely via OAuth and not retained by us."
+    },
+    {
+      "id": 3,
+      "title": "User Responsibilities",
+      "icon": "AlertTriangle",
+      "iconColor": "text-orange-400",
+      "iconBg": "bg-orange-500/20",
+      "content": [
+        "You agree not to misuse the extension or interfere with its functionality.",
+        "You are responsible for securing your vault and any sensitive information stored within it.",
+        "You must not use the extension to store or distribute illegal or harmful content."
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Intellectual Property",
+      "icon": "Scale",
+      "iconColor": "text-purple-400",
+      "iconBg": "bg-purple-500/20",
+      "content": "The Obsidian+ Web Clipper, its name, logo, and source code (excluding Obsidian itself or third-party integrations) are the intellectual property of the developer. All rights reserved."
+    },
+    {
+      "id": 5,
+      "title": "Modifications and Updates",
+      "icon": "RefreshCw",
+      "iconColor": "text-cyan-400",
+      "iconBg": "bg-cyan-500/20",
+      "content": "We may update these Terms from time to time. Continued use of the extension after changes are made constitutes your acceptance of the revised Terms."
+    },
+    {
+      "id": 6,
+      "title": "Disclaimer of Warranty",
+      "variant": "warning",
+      "content": "The Service is provided \"as is\" without warranty of any kind. We do not guarantee the accuracy, reliability, or availability of the Service. Use at your own risk."
+    },
+    {
+      "id": 7,
+      "title": "Limitation of Liability",
+      "variant": "danger",
+      "content": "In no event shall the developer be liable for any direct, indirect, incidental, or consequential damages arising from the use of the Service."
+    },
+    {
+      "id": 8,
+      "title": "Contact",
+      "icon": "Mail",
+      "iconColor": "text-blue-400",
+      "iconBg": "bg-blue-500/20",
+      "content": "If you have any questions or concerns about these Terms, please contact us at Gmail:",
+      "email": "azeemkhandsari@gmail.com"
+    }
+  ]
+}

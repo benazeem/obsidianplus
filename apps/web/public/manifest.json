@@ -1,0 +1,7 @@
+{
+  "name": "com.obsidianplus.host",
+  "description": "Obsidian Plus Native Messaging Host: Native host for Obsidian Plus Chrome extension",
+  "path": "obsidianPlus.%%EXTENSION%%",
+  "type": "stdio",
+  "allowed_origins": ["chrome-extension://nbeeifpffimepiobjmhpfihileadikdo/"]
+}

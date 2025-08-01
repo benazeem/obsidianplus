@@ -1,97 +1,111 @@
+import { motion } from 'motion/react'
+import { Cloud, Database, Eye, Lock, Mail, Shield } from 'lucide-react'
+import privacyPolicyData from '../data/privacyPolicy.json'
+
+const iconMap: Record<string, JSX.Element> = {
+  Database: <Database className="w-6 h-6 text-blue-400" />,
+  Eye: <Eye className="w-6 h-6 text-red-400" />,
+  Lock: <Lock className="w-6 h-6 text-green-400" />,
+  Cloud: <Cloud className="w-6 h-6 text-yellow-400" />,
+  Mail: <Mail className="w-6 h-6 text-purple-400" />,
+}
+
 const PrivacyPolicy = () => {
   return (
-    <div className="max-w-4xl mx-auto px-4 py-16 text-gray-800 bg-gray-300 rounded-lg shadow-md">
-      <h1 className="text-3xl font-bold mb-2">Privacy Policy</h1>
-      <p className="mb-4 text-sm text-gray-500">
-        Effective Date: July 23, 2025
-      </p>
+    <div className="min-h-screen bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900 text-white pt-20 pb-16 px-6">
+      <div className="max-w-4xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-12"
+        >
+          <div className="flex items-center justify-center mb-6">
+            <div className="p-4 bg-blue-500/20 rounded-full">
+              <Shield className="w-12 h-12 text-blue-400" />
+            </div>
+          </div>
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold bg-gradient-to-r from-white via-blue-100 to-purple-200 bg-clip-text text-transparent mb-4">
+            Privacy Policy
+          </h1>
+          <p className="text-gray-300 text-md md:text-lg">
+            Effective Date:{' '}
+            <span className="text-white font-semibold">
+              {privacyPolicyData.effectiveDate}
+            </span>
+          </p>
+        </motion.div>
 
-      <p className="mb-4">
-        Obsidian+ Web Clipper is committed to protecting your privacy. This
-        policy explains how your data is handled when using the extension.
-      </p>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="bg-white/10 backdrop-blur-md rounded-2xl shadow-2xl border border-white/20 p-8 md:p-12 text-left"
+        >
+          <div className="prose prose-invert max-w-none">
+            <p className="text-md md:text-lg text-gray-200 mb-8">
+              {privacyPolicyData.intro}
+            </p>
 
-      <h2 className="text-xl font-semibold mt-6 mb-2">
-        1. What Data We Collect
-      </h2>
-      <ul className="list-disc list-inside space-y-2 mb-4">
-        <li>
-          <strong>Identity:</strong> If you connect a cloud provider (e.g.,
-          Google Drive), we request your email for authentication purposes only.
-        </li>
-        <li>
-          <strong>Clipped Content:</strong> All content you clip is stored
-          locally on your device or in your connected cloud storage. We do not
-          store any content on our servers.
-        </li>
-        <li>
-          <strong>Settings:</strong> Your vault path, user preferences, and
-          configurations are stored locally using Chrome’s storage APIs.
-        </li>
-      </ul>
-
-      <h2 className="text-xl font-semibold mt-6 mb-2">2. What We Don’t Do</h2>
-      <ul className="list-disc list-inside space-y-2 mb-4">
-        <li>
-          We do <strong>not collect</strong>, track, or sell your personal data.
-        </li>
-        <li>
-          We do <strong>not use analytics</strong> or third-party trackers.
-        </li>
-        <li>
-          We do <strong>not store or transmit</strong> any clipped content to
-          external servers.
-        </li>
-      </ul>
-
-      <h2 className="text-xl font-semibold mt-6 mb-2">
-        3. Permissions Explanation
-      </h2>
-      <ul className="list-disc list-inside space-y-2 mb-4">
-        <li>
-          <strong>nativeMessaging:</strong> Allows communication with the native
-          host app to save data to your Obsidian vault.
-        </li>
-        <li>
-          <strong>activeTab, scripting, tabs:</strong> Enables capturing content
-          from your current browser tab.
-        </li>
-        <li>
-          <strong>contextMenus:</strong> Adds right-click clip options on pages.
-        </li>
-        <li>
-          <strong>storage:</strong> Saves user preferences like vault paths,
-          templates, etc.
-        </li>
-        <li>
-          <strong>identity, identity.email:</strong> Used for optional
-          authentication when integrating cloud sync (Google Drive, Dropbox,
-          etc).
-        </li>
-      </ul>
-
-      <h2 className="text-xl font-semibold mt-6 mb-2">
-        4. Cloud Access (Optional)
-      </h2>
-      <p className="mb-4">
-        When you choose to link a cloud provider, Obsidian+ uses secure OAuth to
-        connect. All access is limited to your own files and can be revoked at
-        any time from your provider’s dashboard.
-      </p>
-
-      <h2 className="text-xl font-semibold mt-6 mb-2">5. Contact</h2>
-      <p className="mb-4">
-        If you have any questions or concerns regarding this privacy policy,
-        please contact us at{' '}
-        <a href="mailto:azeemkhandsari@gmail.com" className="text-blue-600 underline">
-          azeemkhandsari@gmail.com
-        </a>
-        .
-      </p>
-
-      <p className="mt-10 text-sm text-gray-500">
-        © {new Date().getFullYear()} Obsidian+ Web Clipper
-      </p>
+            <div className="space-y-8">
+              {privacyPolicyData.sections.map((section, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: idx * 0.1 }}
+                  className="flex gap-4"
+                >
+                  <div
+                    className={`flex-shrink-0 p-3 bg-${section.color}-500/20 rounded-lg`}
+                  >
+                    {iconMap[section.icon]}
+                  </div>
+                  <div>
+                    <h2 className="text-xl md:text-2xl font-bold mb-4 text-white">
+                      {section.title}
+                    </h2>
+                    {section.items ? (
+                      <ul className="space-y-3 text-gray-200">
+                        {section.items.map((item, i) => (
+                          <li key={i} className="flex items-start gap-3">
+                            <div
+                              className={`w-2 h-2 bg-${section.color}-400 rounded-full mt-2 flex-shrink-0`}
+                            ></div>
+                            <div>
+                              {'label' in item && (
+                                <strong className="text-white">
+                                  {item.label}:
+                                </strong>
+                              )}{' '}
+                              {item.text}
+                            </div>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <p className="text-gray-200">
+                        {section.description}
+                        {section.contact && (
+                          <>
+                            {' '}
+                            <a
+                              href={`mailto:${section.contact}`}
+                              className="text-blue-400 hover:text-blue-300 underline transition-colors duration-200"
+                            >
+                              {section.contact}
+                            </a>
+                          </>
+                        )}
+                      </p>
+                    )}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </motion.div>
+      </div>
     </div>
   )
 }

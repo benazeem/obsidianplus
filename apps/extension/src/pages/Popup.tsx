@@ -1,53 +1,50 @@
-import { useEffect } from "react";
-import VaultManager from "../components/VaultManager";
-import { Button } from "@obsidianplus/ui";
-import PopupHead from "../components/PopupHead";
-import { useSelector, useDispatch } from "react-redux";
-import type { AppDispatch, RootState } from "../store";
-import { initializeStates } from "@/services/background";
-import { Bug, Github, MessageSquarePlus } from "lucide-react";
-import setNotification from "@/utils/Notification";
+import { useEffect } from 'react'
+import VaultManager from '../components/VaultManager'
+import { Button } from '@obsidianplus/ui'
+import PopupHead from '../components/PopupHead'
+import { useSelector, useDispatch } from 'react-redux'
+import type { AppDispatch, RootState } from '../store'
+import { initializeStates } from '@/services/background'
+import { Bug, Github, MessageSquarePlus } from 'lucide-react'
+import setNotification from '@/utils/Notification'
 
 const Popup: React.FC = () => {
-  const dispatch = useDispatch<AppDispatch>();
-  const theme = useSelector((state: RootState) => state.ui.theme);
+  const dispatch = useDispatch<AppDispatch>()
+  const theme = useSelector((state: RootState) => state.ui.theme)
   const background = useSelector(
-    (state: RootState) => state.ui.backgroundImageUrl
-  );
-  const fontSize = useSelector((state: RootState) => state.ui.fontSize);
+    (state: RootState) => state.ui.backgroundImageUrl,
+  )
+  const fontSize = useSelector((state: RootState) => state.ui.fontSize)
 
   useEffect(() => {
-    const root = window.document.documentElement;
+    const root = window.document.documentElement
 
-    root.classList.remove("light", "dark");
+    root.classList.remove('light', 'dark')
 
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+    if (theme === 'system') {
+      const systemTheme = window.matchMedia('(prefers-color-scheme: dark)')
         .matches
-        ? "dark"
-        : "light";
+        ? 'dark'
+        : 'light'
 
-      root.classList.add(systemTheme);
-      return;
+      root.classList.add(systemTheme)
+      return
     }
 
-    root.classList.add(theme);
-  }, [theme]);
+    root.classList.add(theme)
+  }, [theme])
 
   useEffect(() => {
     const init = async () => {
       try {
-        await initializeStates(dispatch);
-      } catch (error) { 
-        setNotification(
-          "Failed to initialize states: " + error,
-          "error"
-        );
+        await initializeStates(dispatch)
+      } catch (error) {
+        setNotification('Failed to initialize states: ' + error, 'error')
       }
-    };
+    }
 
-    init();
-  }, [dispatch]);
+    init()
+  }, [dispatch])
 
   return (
     <div
@@ -62,39 +59,39 @@ const Popup: React.FC = () => {
         </h3>
         <div className="flex items-center justify-evenly gap-4">
           <Button
-            variant={"ghost"}
+            variant={'ghost'}
             onClick={() => {
               window.open(
-                "https://github.com/benazeem/obsidianplus/issues/new?template=bug_report.md",
-                "_blank"
-              );
+                'https://github.com/benazeem/obsidianplus/issues/new?template=bug_report.md',
+                '_blank',
+              )
             }}
           >
             <Bug className="inline-block " />
           </Button>
           <Button
-            variant={"ghost"}
+            variant={'ghost'}
             onClick={() => {
               window.open(
-                "https://github.com/benazeem/obsidianplus/issues/new?template=feature_request.md",
-                "_blank"
-              );
+                'https://github.com/benazeem/obsidianplus/issues/new?template=feature_request.md',
+                '_blank',
+              )
             }}
           >
             <MessageSquarePlus className="inline-block " />
           </Button>
           <Button
             type="button"
-            variant={"ghost"}
+            variant={'ghost'}
             onClick={() => {
-              window.open("https://github.com/benazeem/obsidianplus", "_blank");
+              window.open('https://github.com/benazeem/obsidianplus', '_blank')
             }}
           >
             <Github className="inline-block" />
-          </Button>
+          </Button> 
         </div>
         <div>
-          Made with ❤️ by{" "}
+          Made with ❤️ by
           <a
             href="https://github.com/benazeem"
             target="_blank"
@@ -106,7 +103,7 @@ const Popup: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Popup;
+export default Popup

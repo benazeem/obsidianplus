@@ -20,17 +20,27 @@ function Footer() {
             <h3 className="font-semibold mb-2">Quick Links</h3>
             <ul className="space-y-1">
               <li>
-                <a href="#" className="hover:underline">
+                <a
+                  href="https://chromewebstore.google.com/detail/nbeeifpffimepiobjmhpfihileadikdo"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                  target="_blank"
+                >
                   Install Extension
                 </a>
               </li>
               <li>
-               <Link to="/install" className="hover:underline">
+                <Link to="/install" className="hover:underline">
                   Download Native Host
                 </Link>
               </li>
               <li>
-                <a href="#" className="hover:underline">
+                <a
+                  href="https://github.com/benazeem/obsidianplus"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                  target="_blank"
+                >
                   Documentation
                 </a>
               </li>
@@ -43,13 +53,25 @@ function Footer() {
             <h3 className="font-semibold mb-2">Connect With Us</h3>
             <ul className="space-y-1 flex gap-2">
               <li>
-                <a href="#" className="hover:underline">
+                <a
+                  title="Follow on Twitter"
+                  href="https://x.com/devazeem"
+                  className="hover:underline"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
                   <Twitter />
                 </a>
               </li>
               <li>
                 {' '}
-                <a href="https://github.com/benazeem/obsidianplus" target='_blank' className="hover:underline">
+                <a
+                  title="Follow on GitHub"
+                  href="https://github.com/benazeem/obsidianplus"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  className="hover:underline"
+                >
                   <Github />
                 </a>
               </li>
@@ -63,6 +85,7 @@ function Footer() {
                 GitHub:&nbsp;
                 <a
                   href="https://github.com/benazeem"
+                  rel="noopener noreferrer"
                   target="_blank"
                   className="hover:underline"
                 >
@@ -73,6 +96,8 @@ function Footer() {
                 Email:&nbsp;
                 <a
                   href="mailto:azeemkhandsari@gmail.com"
+                  rel="noopener noreferrer"
+                  target="_blank"
                   className="hover:underline"
                 >
                   azeemkhandsari

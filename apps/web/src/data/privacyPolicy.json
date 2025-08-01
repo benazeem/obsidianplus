@@ -1,0 +1,60 @@
+{
+  "effectiveDate": "August 1, 2025",
+  "intro": "Obsidian+ Web Clipper is committed to protecting your privacy. This policy explains how your data is handled when using the extension.",
+  "sections": [
+    {
+      "title": "1. What Data We Collect",
+      "icon": "Database",
+      "color": "blue",
+      "items": [
+        {
+          "label": "Identity",
+          "text": "If you connect a cloud provider (e.g., Google Drive), we request your email for authentication purposes only."
+        },
+        {
+          "label": "Clipped Content",
+          "text": "All content you clip is stored locally on your device or in your connected cloud storage. We do not store any content on our servers."
+        },
+        {
+          "label": "Settings",
+          "text": "Your vault path, user preferences, and configurations are stored locally using Chrome's storage APIs."
+        }
+      ]
+    },
+    {
+      "title": "2. What We Don't Do",
+      "icon": "Eye",
+      "color": "red",
+      "items": [
+        { "text": "We do not collect, track, or sell your personal data." },
+        { "text": "We do not use analytics or third-party trackers." },
+        { "text": "We do not store or transmit any clipped content to external servers." }
+      ]
+    },
+    {
+      "title": "3. Permissions Explanation",
+      "icon": "Lock",
+      "color": "green",
+      "items": [
+        { "label": "nativeMessaging", "text": "Allows communication with the native host app to save data to your Obsidian vault." },
+        { "label": "activeTab, scripting, tabs", "text": "Enables capturing content from your current browser tab." },
+        { "label": "contextMenus", "text": "Adds right-click clip options on pages." },
+        { "label": "storage", "text": "Saves user preferences like vault paths, templates, etc." },
+        { "label": "identity, identity.email", "text": "Used for optional authentication when integrating cloud sync." }
+      ]
+    },
+    {
+      "title": "4. Cloud Access (Optional)",
+      "icon": "Cloud",
+      "color": "yellow",
+      "description": "When you choose to link a cloud provider, Obsidian+ uses secure OAuth to connect. All access is limited to your own files and can be revoked at any time from your provider's dashboard."
+    },
+    {
+      "title": "5. Contact",
+      "icon": "Mail",
+      "color": "purple",
+      "description": "If you have any questions or concerns regarding this privacy policy, please contact us at azeemkhandsari@gmail.com.",
+      "contact": "azeemkhandsari@gmail.com"
+    }
+  ]
+}

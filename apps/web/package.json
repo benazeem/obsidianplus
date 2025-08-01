@@ -13,9 +13,11 @@
     "check": "prettier --write . && eslint --fix"
   },
   "dependencies": {
+    "@obsidianplus/ui": "workspace:*",
     "@tailwindcss/vite": "^4.0.6",
     "@tanstack/react-router": "^1.121.2",
     "@tanstack/react-router-devtools": "^1.121.2",
+    "fs": "0.0.1-security",
     "jszip": "^3.10.1",
     "motion": "^12.23.6",
     "react": "^19.0.0",

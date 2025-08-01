@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import UIManager from '@/components/UIManager'
 import CloudManager from '../components/CloudManager'
 import { Input, Button } from '@obsidianplus/ui'
-import { Vault, X } from 'lucide-react'
+import { Download, Vault, X } from 'lucide-react'
 import type { AppDispatch, RootState } from '@/store'
 import {
   addObsidianVaultRoot,
@@ -194,10 +194,20 @@ function Settings() {
               >
                 Scan Vaults <Vault size={16} className="ml-1" />
               </Button>
+              <a
+                className="p-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md flex items-center gap-1"
+                href="https://obsidianplus.devazeem.me/install"
+                rel="noopener noreferrer"
+                target="_blank"
+                title="Download Host"
+                type="button"
+              >
+                Download Host <Download size={16} className="ml-1" />
+              </a>
               <div className="flex-1"></div>
             </div>
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-200 mb-2">
+              <p className="text-sm text-gray-600 dark:text-gray-200 mb-2 mt-2">
                 Example: <code>/path/to/obsidian/vaults</code> or{' '}
                 <code>/path/to/obsidian/vault1,/path/to/obsidian/vault2</code>
               </p>
@@ -211,6 +221,7 @@ function Settings() {
                     >
                       <p>{root}</p>
                       <button
+                        type="button"
                         onClick={() => handleRemoveRoot(root)}
                         title="Remove vault"
                         className="w-4 h-4 bg-red-500  rounded-full flex justify-center items-center"

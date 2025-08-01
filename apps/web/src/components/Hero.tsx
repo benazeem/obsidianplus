@@ -19,10 +19,15 @@ function Hero() {
             Obsidian vault.
           </p>
           <div className="text-sm md:text-base lg:text-lg flex flex-col xl:flex-row items-center justify-center gap-4 mb-6">
-            <button className="bg-blue-800 text-white px-2 lg:px-4 py-2 rounded hover:bg-blue-900 ">
+            <a
+              href="https://chromewebstore.google.com/detail/nbeeifpffimepiobjmhpfihileadikdo"
+              rel="noopener noreferrer"
+              target="_blank"
+              className="bg-blue-800 text-white px-2 lg:px-4 py-2 rounded hover:bg-blue-900 "
+            >
               <Download className="inline mr-2" />
               Install Extension
-            </button>
+            </a>
             <div className=" bg-black text-blue-300 px-2 lg:px-4 py-2 rounded-md border-blue-500 border-[1px] hover:bg-blue-500 hover:text-black">
               <Link to="/install">
                 <MoveRight className="inline mr-2" />

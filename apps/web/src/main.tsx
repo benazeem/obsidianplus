@@ -11,7 +11,7 @@ import './styles.css'
 import reportWebVitals from './reportWebVitals.ts' 
 import App from './App.tsx'    
 import Home from './pages/Home'
-import Install from './pages/Install'
+import Install from './pages/Install.tsx'
 import PrivacyPolicy from './pages/PrivacyPolicy.tsx'
 import TermsOfService from './pages/TermsOfService.tsx'
 

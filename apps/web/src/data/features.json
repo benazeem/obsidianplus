@@ -3,8 +3,8 @@
     "title": "Cross-Platform Native Host",
     "description": [
       "Works on Windows, macOS, and Linux",
-      "Provides seamless communication between browser and OS",
-      "Uses native messaging for performance and reliability"
+      "Provides seamless communication between browser and OS File System",
+      "Uses native messaging for startup and WebSocket for communication performance and reliability"
     ],
     "icon": "laptop"
   },
@@ -12,7 +12,7 @@
     "title": "Advanced File System Access",
     "description": [
       "Read and write to local files from the browser",
-      "Ideal for note syncing, file automation, and scripting",
+      "Ideal for note syncing, file automation, and scripting (Future features)",
       "No need for cloud APIs or external servers"
     ],
     "icon": "FolderOpen"
@@ -20,7 +20,7 @@
   {
     "title": "Real-Time WebSocket Communication",
     "description": [
-      "Low-latency two-way messaging",
+      "Low-latency messaging",
       "Synchronize data and commands instantly",
       "Reliable architecture built for developers"
     ],
@@ -34,15 +34,6 @@
       "No telemetry or data collection"
     ],
     "icon": "ShieldCheck"
-  },
-  {
-    "title": "Developer-Focused Logging",
-    "description": [
-      "Visual logs in browser and HTML UI",
-      "Helps debug native-host communication easily",
-      "Detailed error and status outputs"
-    ],
-    "icon": "code"
   },
   {
     "title": "Obsidian Optimized",
@@ -67,7 +58,7 @@
     "description": [
       "Simple step-by-step setup flow",
       "Quick download and manifest registration",
-      "Start using in under 2 minutes"
+      "Start using in under 5 minutes"
     ],
     "icon": "CheckCircle"
   }
