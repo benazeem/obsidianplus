@@ -1,5 +1,5 @@
 export default async function generateManifestFile(OS: string): Promise<string> {
-  const EXE = OS === 'Windows' ? 'bat' : 'sh'
+  const EXE = OS === 'windows' ? 'bat' : 'sh'
   const response = await fetch('/manifest.json')
   const manifest = await response.json()
   const manifestString = JSON.stringify(manifest)
